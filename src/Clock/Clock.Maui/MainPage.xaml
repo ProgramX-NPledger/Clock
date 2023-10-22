@@ -5,9 +5,14 @@
     <ContentView>
         <VerticalStackLayout>
             <!-- top pane -->
-            <HorizontalStackLayout>
-                
-            </HorizontalStackLayout>
+                <HorizontalStackLayout>
+                    <Label x:Name = "ClockLabel"
+                           Text="00:00" />
+                    <Entry x:Name = "WorkItemEntry"/>
+                    <Button x:Name = "StartStopButton" 
+                            Text="Start"
+                            Clicked="StartStopButton_OnClicked"/>
+                </HorizontalStackLayout>
             <!-- bottom pane -->
             <ScrollView>
                 <VerticalStackLayout>
@@ -35,7 +40,7 @@
                         x:Name="CounterBtn"
                         Text="Click me"
                         SemanticProperties.Hint="Counts the number of times you click"
-                        Clicked="OnCounterClicked"
+                       
                         HorizontalOptions="Center" />
 
 
