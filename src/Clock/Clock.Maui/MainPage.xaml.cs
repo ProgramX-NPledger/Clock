@@ -22,6 +22,7 @@ public partial class MainPage : ContentPage
         else
         {
             StartStopButton.Text = "Stop";
+            this.Resources["Timer"] = "00:00:01"; // setting a dynamic resource
             _clockIsRunning = true;
         }
     }

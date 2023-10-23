@@ -1,21 +1,38 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:system="clr-namespace:System;assembly=System.Runtime"
+             xmlns:localns="clr-namespace:Clock.Maui"
              x:Class="Clock.Maui.MainPage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <x:String x:Key="Timer">00:00:00</x:String>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentView>
         <VerticalStackLayout>
             <!-- top pane -->
-                <HorizontalStackLayout>
-                    <Label x:Name = "ClockLabel"
-                           Text="00:00" />
-                    <Entry x:Name = "WorkItemEntry"/>
-                    <Button x:Name = "StartStopButton" 
-                            Text="Start"
-                            Clicked="StartStopButton_OnClicked"/>
-                </HorizontalStackLayout>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="100"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.Resources>
+                    <x:String x:Key="StartText">Start &gt;</x:String>
+                    <x:String x:Key="StopText">Stop []</x:String>
+                </Grid.Resources>
+                <Label Grid.Column="0" x:Name = "ClockLabel"
+                       Style="{StaticResource TimerStyle}"
+                       Text="{DynamicResource Timer}" />
+                <Entry Grid.Column="1" x:Name = "WorkItemEntry"/>
+                <Button Grid.Column="2" x:Name = "StartStopButton" 
+                        Text="{StaticResource StartText}"
+                        Clicked="StartStopButton_OnClicked"/>
+            </Grid>
             <!-- bottom pane -->
             <ScrollView>
-                <VerticalStackLayout>
+                <VerticalStackLayout Spacing="50">
 
                     <Image
                         Source="dotnet_bot.png"
@@ -43,8 +60,39 @@
                        
                         HorizontalOptions="Center" />
 
-
+                    <!-- target properties per platform -->
+                    <Label>
+                        <Label.Text>
+                            <OnPlatform x:TypeArguments="system:String">
+                                <On Platform="iOS" Value="iPhone" />
+                                <On Platform="Android" Value="Android" />
+                                <On Platform="WinUI" Value="Windows" />
+                            </OnPlatform>
+                        </Label.Text>
+                    </Label>
                     
+                    <!-- resources properties per platform -->
+                    <Label>
+                        <Label.Resources>
+                            <OnPlatform x:Key="PlatformName" x:TypeArguments="system:String">
+                                <On Platform="iOS" Value="[iOS]" />
+                                <On Platform="Android" Value="[ANdroid]" />
+                                <On Platform="WinUI" Value="[Windows]" />
+                                <On Platform="MacCatalyst" Value="[macOS]" />
+                            </OnPlatform>
+                        </Label.Resources>
+                        <Label.Text>{StaticResource PlatformName}</Label.Text>
+                    </Label>
+                        
+                    
+                    <!-- target properties per platform, abbreviated form, type implied -->
+                    <Label Text="{OnPlatform WinUI='(Windows)', iOS='(iOS)', Default='(other)'}" />
+                    
+                    <!-- reference local namespace content -->
+                    <HorizontalStackLayout>
+                        <Label Text="Application name:" />
+                        <Label Text="{x:Static Member=localns:SharedResources.ApplicationName}" />
+                    </HorizontalStackLayout>
                 </VerticalStackLayout>
             </ScrollView>
         </VerticalStackLayout>
