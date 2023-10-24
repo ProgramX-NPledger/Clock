@@ -2,22 +2,28 @@
 
 public partial class MainPage : ContentPage
 {
-    int count = 0;
+    private bool _clockIsRunning = false;
 
     public MainPage()
     {
         InitializeComponent();
     }
 
-    private void OnCounterClicked(object sender, EventArgs e)
+
+
+    private void StartStopButton_OnClicked(object sender, EventArgs e)
     {
-        count++;
-
-        if (count == 1)
-            CounterBtn.Text = $"Clicked {count} time";
+        if (_clockIsRunning)
+        {
+            WorkItemEntry.Text = "";
+            StartStopButton.Text = "Start";
+            _clockIsRunning = false;
+        }
         else
-            CounterBtn.Text = $"Clicked {count} times";
-
-        SemanticScreenReader.Announce(CounterBtn.Text);
+        {
+            StartStopButton.Text = "Stop";
+            this.Resources["Timer"] = "00:00:01"; // setting a dynamic resource
+            _clockIsRunning = true;
+        }
     }
 }
