@@ -1,4 +1,5 @@
-﻿using Clock.Maui.Model;
+﻿using Clock.Maui.Data;
+using Clock.Maui.Model;
 using SQLite;
 
 namespace Clock.Maui;
@@ -10,17 +11,13 @@ public partial class MainPage : ContentPage
     
     public MainPage()
     {
+        
         InitializeComponent();
     }
 
-    private SQLiteConnection GetSqLiteConnection()
-    {
-        string fileName = Path.Combine(FileSystem.AppDataDirectory, "workitems.sqlite.db");
-        SQLiteConnection sqLiteConnection = new SQLiteConnection(fileName);
-        CreateTableResult createTableResult=sqLiteConnection.CreateTable<WorkItem>();
-        return sqLiteConnection;
-    }
+   
 
+ 
 
     private void StartStopButton_OnClicked(object sender, EventArgs e)
     {
@@ -42,26 +39,13 @@ public partial class MainPage : ContentPage
 
     private void AddCurrentWorkItemToDatabase()
     {
-        SQLiteConnection sqLiteConnection = GetSqLiteConnection();
-        WorkItem workItem = new WorkItem()
+        App.WorkItemRepository.AddCurrentWorkItemToDatabase(new WorkItem()
         {
             Title = WorkItemEntry.Text,
             RecordedTime = CalculateMainTimerDifference(),
             StartTime = _mainClockLastStartedAt,
             StopTime = DateTime.Now
-        };
-        int result = sqLiteConnection.Insert(workItem);
-        switch (result)
-        {
-            case < 1:
-                // something went wrong
-                throw new InvalidOperationException("Expected 1 update, but 0 were effected");
-            case > 1:
-                // more updates than were expected
-                throw new InvalidOperationException($"Expected 1 update, but {result} were effected");
-        }
-        
-        
+        });
     }
 
     private void WorkItemEntry_OnCompleted(object sender, EventArgs e)

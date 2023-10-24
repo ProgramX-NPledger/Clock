@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Clock.Maui.Data;
+using Microsoft.Extensions.Logging;
 
 namespace Clock.Maui;
 
@@ -19,6 +20,11 @@ public static class MauiProgram
         builder.Logging.AddDebug();
 #endif
 
+        string fileName = Path.Combine(FileSystem.AppDataDirectory, "workitems.sqlite.db");
+        builder.Services.AddSingleton<WorkItemRepository>(s =>
+            ActivatorUtilities.CreateInstance<WorkItemRepository>(s,fileName));
+        
+        
         return builder.Build();
     }
 }

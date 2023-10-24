@@ -6,7 +6,7 @@
              x:Class="Clock.Maui.MainPage">
     <ContentPage.Resources>
         <ResourceDictionary>
-            <x:String x:Key="Timer">00:00:00</x:String>
+            <x:String x:Key="Timer">0:00:00</x:String>
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentView>
