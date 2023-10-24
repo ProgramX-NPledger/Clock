@@ -25,8 +25,11 @@
                 <Label Grid.Column="0" x:Name = "ClockLabel"
                        Style="{StaticResource TimerStyle}"
                        Text="{DynamicResource Timer}" />
-                <Entry Grid.Column="1" x:Name = "WorkItemEntry"/>
-                <Button Grid.Column="2" x:Name = "StartStopButton" 
+                <Entry Grid.Column="1" 
+                       x:Name = "WorkItemEntry"
+                       Completed="WorkItemEntry_OnCompleted"/>
+                <Button Grid.Column="2" 
+                        x:Name = "StartStopButton" 
                         Text="{StaticResource StartText}"
                         Clicked="StartStopButton_OnClicked"/>
             </Grid>
