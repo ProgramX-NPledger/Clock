@@ -12,25 +12,25 @@ public class WorkItemRepository
 		_fileName = fileName;
 	}
 	
-	private SQLiteConnection GetSqLiteConnection()
+	private async Task<SQLiteAsyncConnection> GetSqLiteConnection()
 	{
-		SQLiteConnection sqLiteConnection = new SQLiteConnection(_fileName);
+		SQLiteAsyncConnection sqLiteConnection = new SQLiteAsyncConnection(_fileName);
 		// this creation could be moved elsewhere
-		CreateTableResult createTableResult=sqLiteConnection.CreateTable<WorkItem>();
+		CreateTableResult createTableResult=await sqLiteConnection.CreateTableAsync<WorkItem>();
 		return sqLiteConnection;
 	}
 	
-	internal IEnumerable<WorkItem> GetLastNWorkItems(int lastN)
+	internal async Task<IEnumerable<WorkItem>> GetLastNWorkItems(int lastN)
 	{
-		SQLiteConnection sqLiteConnection = GetSqLiteConnection();
-		TableQuery<WorkItem> results=sqLiteConnection.Table<WorkItem>().OrderByDescending(q => q.StopTime).Take(lastN);
+		SQLiteAsyncConnection sqLiteConnection = await GetSqLiteConnection();
+		List<WorkItem> results=await sqLiteConnection.Table<WorkItem>().OrderByDescending(q => q.StopTime).Take(lastN).ToListAsync();
 		return results.ToArray();
 	}
 	
-	internal void AddCurrentWorkItemToDatabase(WorkItem workItem)
+	internal async void AddCurrentWorkItemToDatabase(WorkItem workItem)
 	{
-		SQLiteConnection sqLiteConnection = GetSqLiteConnection();
-		int result = sqLiteConnection.Insert(workItem);
+		SQLiteAsyncConnection sqLiteConnection = await GetSqLiteConnection();
+		int result = await sqLiteConnection.InsertAsync(workItem);
 		switch (result)
 		{
 			case < 1:
