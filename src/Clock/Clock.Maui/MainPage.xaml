@@ -3,12 +3,16 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:system="clr-namespace:System;assembly=System.Runtime"
              xmlns:localns="clr-namespace:Clock.Maui"
+             xmlns:localnsviewmodel="clr-namespace:Clock.Maui.ViewModel"
              x:Class="Clock.Maui.MainPage">
     <ContentPage.Resources>
         <ResourceDictionary>
             <x:String x:Key="Timer">0:00:00</x:String>
         </ResourceDictionary>
     </ContentPage.Resources>
+    <ContentPage.BindingContext>
+        <localnsviewmodel:MainViewModel></localnsviewmodel:MainViewModel>
+    </ContentPage.BindingContext>
     <ContentView>
         <VerticalStackLayout>
             <!-- top pane -->
@@ -24,14 +28,15 @@
                 </Grid.Resources>
                 <Label Grid.Column="0" x:Name = "ClockLabel"
                        Style="{StaticResource TimerStyle}"
-                       Text="{DynamicResource Timer}" />
+                       Text="{Binding MainTimerValue}" />
                 <Entry Grid.Column="1" 
                        x:Name = "WorkItemEntry"
-                       Completed="WorkItemEntry_OnCompleted"/>
+                       Text = "{Binding WorkItemEntry}"
+                       /> <!-- Completed="{Binding StartStopButtonCommand}" -->
                 <Button Grid.Column="2" 
                         x:Name = "StartStopButton" 
-                        Text="{StaticResource StartText}"
-                        Clicked="StartStopButton_OnClicked"/>
+                        Text="{Binding MainTimerButtonText}"
+                        Command="{Binding StartStopButtonCommand}"/>
             </Grid>
             <!-- bottom pane -->
             <ScrollView>
