@@ -24,6 +24,10 @@ public partial class MainPage : ContentPage
         {
             _mainClock.Stop();
         };
+        ((MainViewModel)BindingContext).RequestLoadLatestPersistedWorkItems += async (s, e) =>
+        {
+            ((MainViewModel)BindingContext).WorkItems = await App.WorkItemRepository.GetLastNWorkItems(5);
+        };
 
     }
 

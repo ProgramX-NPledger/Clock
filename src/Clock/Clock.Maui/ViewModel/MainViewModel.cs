@@ -14,9 +14,25 @@ public class MainViewModel : INotifyPropertyChanged
 	private string _workItemEntry;
 	private string _mainTimerButtonText;
 	private bool _isMainTimerRunning;
-
+	private IEnumerable<WorkItem> _workItems;
+	
 	public event EventHandler<EventArgs> RequestMainTimerStart;
 	public event EventHandler<EventArgs> RequestMainTimerStop;
+	public event EventHandler<EventArgs> RequestLoadLatestPersistedWorkItems;
+	public event PropertyChangedEventHandler PropertyChanged;
+
+	public IEnumerable<WorkItem> WorkItems
+	{
+		get => _workItems;
+		set
+		{
+			if (_workItems != value)
+			{
+				_workItems = value;
+				OnPropertyChanged();
+			}
+		}
+	}
 	
 	public bool IsMainTimerRunning
 	{
@@ -85,7 +101,7 @@ public class MainViewModel : INotifyPropertyChanged
 	}
 	
 	public ICommand StartStopButtonCommand { get; private set; }
-
+	public ICommand LoadLatestPersistedWorkItemsCommand { get; private set; }
 	
 	
 	
@@ -96,11 +112,14 @@ public class MainViewModel : INotifyPropertyChanged
 		{
 			StopOrStartMainClock();
 		});
+		LoadLatestPersistedWorkItemsCommand = new Command(() =>
+		{
+			OnRequestLoadLatestPersistedWorkItems();
+		});
 	}
 
 
 
-	public event PropertyChangedEventHandler PropertyChanged;
 
 	protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
 	{
@@ -115,6 +134,11 @@ public class MainViewModel : INotifyPropertyChanged
 	protected virtual void OnRequestMainTimerStop(EventArgs e)
 	{
 		if (RequestMainTimerStop != null) RequestMainTimerStop(this,e);
+	}
+	
+	protected virtual void OnRequestLoadLatestPersistedWorkItems()
+	{
+		RequestLoadLatestPersistedWorkItems?.Invoke(this, EventArgs.Empty);
 	}
 	
 	// protected bool SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
@@ -150,24 +174,7 @@ public class MainViewModel : INotifyPropertyChanged
             StopTime = DateTime.Now
         });
     }
-
-    private void WorkItemEntry_OnCompleted(object sender, EventArgs e)
-    {
-        // user has pressed Enter on text box, so start the clock
-        Entry entry = (Entry)sender;
-
-        // if the clock is not running, start it
-        if (IsMainTimerRunning)
-        {
-            StartMainClock();
-        }
-        else
-        {
-            // if it's already running, we should add the current work item, stop the clock and restart it with the new WorkItem
-            
-        }
-
-    }
+    
 
     private void StartMainClock()
     {
@@ -186,6 +193,6 @@ public class MainViewModel : INotifyPropertyChanged
         MainTimerButtonText = "Start";
     }
 
-  
-	
+
+   
 }
