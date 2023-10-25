@@ -174,6 +174,7 @@ public class MainViewModel : INotifyPropertyChanged
         MainTimerButtonText = "Stop";
         
         MainTimerLastStartedAt = DateTime.Now;
+        IsMainTimerRunning = true;
         OnRequestMainTimerStart(EventArgs.Empty);
     }
 
@@ -181,6 +182,7 @@ public class MainViewModel : INotifyPropertyChanged
     {
 		OnRequestMainTimerStop(EventArgs.Empty);
         WorkItemEntry = string.Empty;
+        IsMainTimerRunning = false;
         MainTimerButtonText = "Start";
     }
 

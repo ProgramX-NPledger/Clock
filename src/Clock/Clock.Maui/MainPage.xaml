@@ -4,6 +4,7 @@
              xmlns:system="clr-namespace:System;assembly=System.Runtime"
              xmlns:localns="clr-namespace:Clock.Maui"
              xmlns:localnsviewmodel="clr-namespace:Clock.Maui.ViewModel"
+             xmlns:localnsbehaviours="clr-namespace:Clock.Maui.Behaviour"
              x:Class="Clock.Maui.MainPage">
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -31,8 +32,11 @@
                        Text="{Binding MainTimerValue}" />
                 <Entry Grid.Column="1" 
                        x:Name = "WorkItemEntry"
-                       Text = "{Binding WorkItemEntry}"
-                       /> <!-- Completed="{Binding StartStopButtonCommand}" -->
+                       Text = "{Binding WorkItemEntry}">
+                   <Entry.Behaviors>
+                       <localnsbehaviours:EntryCompletedEventToCommandBehaviour />
+                    </Entry.Behaviors>
+                </Entry>
                 <Button Grid.Column="2" 
                         x:Name = "StartStopButton" 
                         Text="{Binding MainTimerButtonText}"
