@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 //using Android.Locations;
@@ -14,14 +15,16 @@ public class MainViewModel : INotifyPropertyChanged
 	private string _workItemEntry;
 	private string _mainTimerButtonText;
 	private bool _isMainTimerRunning;
-	private IEnumerable<WorkItem> _workItems;
+	private ObservableCollection<WorkItem> _workItems;
 	
 	public event EventHandler<EventArgs> RequestMainTimerStart;
 	public event EventHandler<EventArgs> RequestMainTimerStop;
 	public event EventHandler<EventArgs> RequestLoadLatestPersistedWorkItems;
 	public event PropertyChangedEventHandler PropertyChanged;
+	public event EventHandler<WorkItemEventArgs> WorkItemAdded;
+	
 
-	public IEnumerable<WorkItem> WorkItems
+	public ObservableCollection<WorkItem> WorkItems
 	{
 		get => _workItems;
 		set
@@ -166,13 +169,19 @@ public class MainViewModel : INotifyPropertyChanged
 
     private void AddCurrentWorkItemToDatabase()
     {
-        App.WorkItemRepository.AddCurrentWorkItemToDatabase(new WorkItem()
-        {
-            Title = WorkItemEntry,
-            RecordedTime = MainTimerValue,
-            StartTime = _mainTimerLastStartedAt,
-            StopTime = DateTime.Now
-        });
+	    WorkItem workItem = new WorkItem()
+	    {
+		    Title = WorkItemEntry,
+		    RecordedTime = MainTimerValue,
+		    StartTime = _mainTimerLastStartedAt,
+		    StopTime = DateTime.Now
+	    };
+	    
+	    WorkItems.Add(workItem);
+	    OnWorkItemAdded(new WorkItemEventArgs()
+	    {
+		    WorkItem = workItem
+	    });
     }
     
 
@@ -194,5 +203,8 @@ public class MainViewModel : INotifyPropertyChanged
     }
 
 
-   
+    protected virtual void OnWorkItemAdded(WorkItemEventArgs e)
+    {
+	    WorkItemAdded?.Invoke(this, e);
+    }
 }

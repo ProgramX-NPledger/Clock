@@ -27,7 +27,7 @@ public class WorkItemRepository
 		return results.ToArray();
 	}
 	
-	internal async void AddCurrentWorkItemToDatabase(WorkItem workItem)
+	internal async Task AddCurrentWorkItemToDatabase(WorkItem workItem)
 	{
 		SQLiteAsyncConnection sqLiteConnection = await GetSqLiteConnection();
 		int result = await sqLiteConnection.InsertAsync(workItem);

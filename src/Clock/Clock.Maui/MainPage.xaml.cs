@@ -1,4 +1,5 @@
-﻿using Clock.Maui.Data;
+﻿using System.Collections.ObjectModel;
+using Clock.Maui.Data;
 using Clock.Maui.Model;
 using Clock.Maui.ViewModel;
 using SQLite;
@@ -16,17 +17,22 @@ public partial class MainPage : ContentPage
         //BindingContext = new MainViewModel(); // could use this to use a non-default ctor
         
         _mainClock = CreateMainClock();
-        ((MainViewModel)BindingContext).RequestMainTimerStart += (s, e) =>
+        MainViewModel viewModel = (MainViewModel)BindingContext;
+        viewModel.RequestMainTimerStart += (s, e) =>
         {
             _mainClock.Start();
         };
-        ((MainViewModel)BindingContext).RequestMainTimerStop += (s, e) =>
+        viewModel.RequestMainTimerStop += (s, e) =>
         {
             _mainClock.Stop();
         };
-        ((MainViewModel)BindingContext).RequestLoadLatestPersistedWorkItems += async (s, e) =>
+        viewModel.RequestLoadLatestPersistedWorkItems += async (s, e) =>
         {
-            ((MainViewModel)BindingContext).WorkItems = await App.WorkItemRepository.GetLastNWorkItems(5);
+            viewModel.WorkItems = new ObservableCollection<WorkItem>(await App.WorkItemRepository.GetLastNWorkItems(5));
+        };
+        viewModel.WorkItemAdded += async (s, e) =>
+        {
+            await App.WorkItemRepository.AddCurrentWorkItemToDatabase(e.WorkItem);
         };
 
     }

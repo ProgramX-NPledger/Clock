@@ -36,7 +36,7 @@
                        Text="{Binding MainTimerValue}" />
                 <Entry Grid.Column="1" 
                        x:Name = "WorkItemEntry"
-                       Text = "{Binding WorkItemEntry}">
+                       Text = "{Binding WorkItemEntry, Mode=TwoWay}">
                    <Entry.Behaviors>
                        <localnsbehaviours:EntryCompletedEventToCommandBehaviour />
                     </Entry.Behaviors>
