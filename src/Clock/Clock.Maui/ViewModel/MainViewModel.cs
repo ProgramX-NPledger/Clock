@@ -15,7 +15,7 @@ public class MainViewModel : INotifyPropertyChanged
 	private string _workItemEntry;
 	private string _mainTimerButtonText;
 	private bool _isMainTimerRunning;
-	private ObservableCollection<WorkItem> _workItems;
+	private ObservableCollection<WorkItemGroupByDate> _workItems;
 	
 	public event EventHandler<EventArgs> RequestMainTimerStart;
 	public event EventHandler<EventArgs> RequestMainTimerStop;
@@ -24,7 +24,7 @@ public class MainViewModel : INotifyPropertyChanged
 	public event EventHandler<WorkItemEventArgs> WorkItemAdded;
 	
 
-	public ObservableCollection<WorkItem> WorkItems
+	public ObservableCollection<WorkItemGroupByDate> WorkItems
 	{
 		get => _workItems;
 		set
@@ -176,8 +176,27 @@ public class MainViewModel : INotifyPropertyChanged
 		    StartTime = _mainTimerLastStartedAt,
 		    StopTime = DateTime.Now
 	    };
-	    
-	    WorkItems.Insert(0,workItem);
+
+	    WorkItemGroupByDate todaysWorkItemsGroup = WorkItems.SingleOrDefault(q => q.Date == DateTime.Now.Date);
+	    if (todaysWorkItemsGroup == null)
+	    {
+		    // today isn't in the list yet, so create it and add it
+		    WorkItems.Insert(0,
+			    new WorkItemGroupByDate("Today",
+				    DateTime.Now.Date,
+				    new ObservableCollection<WorkItem>(
+					    new WorkItem[]
+						    {
+								workItem
+							}
+				    )
+			    )
+			);
+	    }
+	    else
+	    {
+		    todaysWorkItemsGroup.Insert(0,workItem);
+	    }
 	    OnWorkItemAdded(new WorkItemEventArgs()
 	    {
 		    WorkItem = workItem

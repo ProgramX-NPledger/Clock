@@ -50,8 +50,15 @@
             <ScrollView>
                <CollectionView
                    ItemsSource="{Binding WorkItems}"
-                   ItemsLayout="VerticalGrid,1">
-                   
+                   ItemsLayout="VerticalGrid,1"
+                   IsGrouped="true">
+                   <CollectionView.GroupHeaderTemplate>
+                       <DataTemplate>
+                           <HorizontalStackLayout>
+                               <Label Text="{Binding Name}" />
+                           </HorizontalStackLayout>
+                       </DataTemplate>
+                   </CollectionView.GroupHeaderTemplate>
                    <CollectionView.ItemTemplate>
                        <DataTemplate x:DataType="localnsmodel:WorkItem">
                            <Grid>

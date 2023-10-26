@@ -28,7 +28,7 @@ public partial class MainPage : ContentPage
         };
         viewModel.RequestLoadLatestPersistedWorkItems += async (s, e) =>
         {
-            viewModel.WorkItems = new ObservableCollection<WorkItem>(await App.WorkItemRepository.GetLastNWorkItems(5));
+            viewModel.WorkItems = GroupByDate(await App.WorkItemRepository.GetLastNWorkItems(5));
         };
         viewModel.WorkItemAdded += async (s, e) =>
         {
@@ -37,7 +37,39 @@ public partial class MainPage : ContentPage
 
     }
 
-   
+    private ObservableCollection<WorkItemGroupByDate> GroupByDate(IEnumerable<WorkItem> workItems)
+    {
+        IOrderedEnumerable<WorkItem> sortedWorkItems = workItems.OrderByDescending(o => o.StartTime);
+       
+        ObservableCollection<WorkItemGroupByDate>
+            workItemsGroupedByDate = new ObservableCollection<WorkItemGroupByDate>();
+        
+        foreach (WorkItem workItem in sortedWorkItems)
+        {
+            DateTime date = workItem.StartTime.Date;
+            WorkItemGroupByDate workItemGroupByDate = workItemsGroupedByDate.SingleOrDefault(q => q.Date == date);
+            if (workItemGroupByDate == null)
+            {
+                workItemGroupByDate = new WorkItemGroupByDate(GetFriendlyNameForDate(date), date,
+                    new ObservableCollection<WorkItem>());
+                workItemsGroupedByDate.Add(workItemGroupByDate);
+            }
+            workItemGroupByDate.Add(workItem);
+        }
+
+        return workItemsGroupedByDate;
+    }
+
+    private string GetFriendlyNameForDate(DateTime date)
+    {
+        if (DateTime.Now.Date == date.Date) return "Today";
+        if (DateTime.Now.AddDays(-1).Date == date) return "Yesterday";
+        if (DateTime.Now.Date.AddDays(-7) > date.Date)
+            return $"{(DateTime.Now.Date - date).Days} days ago";
+        return date.ToLongDateString();
+    }
+
+
     private IDispatcherTimer CreateMainClock()
     {
         if (Application.Current != null)
