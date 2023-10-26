@@ -1,11 +1,17 @@
-﻿namespace Clock.Maui;
+﻿using Clock.Maui.Data;
+
+namespace Clock.Maui;
 
 public partial class App : Application
 {
-    public App()
+    public static WorkItemRepository WorkItemRepository { get; private set; }
+    
+    public App(WorkItemRepository workItemRepository)
     {
         InitializeComponent();
 
         MainPage = new AppShell();
+
+        WorkItemRepository = workItemRepository;
     }
 }

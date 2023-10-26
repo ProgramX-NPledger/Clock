@@ -3,12 +3,21 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:system="clr-namespace:System;assembly=System.Runtime"
              xmlns:localns="clr-namespace:Clock.Maui"
+             xmlns:localnsmodel="clr-namespace:Clock.Maui.Model"
+             xmlns:localnsviewmodel="clr-namespace:Clock.Maui.ViewModel"
+             xmlns:localnsbehaviours="clr-namespace:Clock.Maui.Behaviour"
              x:Class="Clock.Maui.MainPage">
     <ContentPage.Resources>
         <ResourceDictionary>
-            <x:String x:Key="Timer">00:00:00</x:String>
+            <x:String x:Key="Timer">0:00:00</x:String>
         </ResourceDictionary>
     </ContentPage.Resources>
+    <ContentPage.BindingContext>
+        <localnsviewmodel:MainViewModel></localnsviewmodel:MainViewModel>
+    </ContentPage.BindingContext>
+    <ContentPage.Behaviors>
+        <localnsbehaviours:ContentPageLoadedEventToCommandBehaviour />
+    </ContentPage.Behaviors>
     <ContentView>
         <VerticalStackLayout>
             <!-- top pane -->
@@ -24,79 +33,41 @@
                 </Grid.Resources>
                 <Label Grid.Column="0" x:Name = "ClockLabel"
                        Style="{StaticResource TimerStyle}"
-                       Text="{DynamicResource Timer}" />
+                       Text="{Binding MainTimerValue}" />
                 <Entry Grid.Column="1" 
                        x:Name = "WorkItemEntry"
-                       Completed="WorkItemEntry_OnCompleted"/>
+                       Text = "{Binding WorkItemEntry}">
+                   <Entry.Behaviors>
+                       <localnsbehaviours:EntryCompletedEventToCommandBehaviour />
+                    </Entry.Behaviors>
+                </Entry>
                 <Button Grid.Column="2" 
                         x:Name = "StartStopButton" 
-                        Text="{StaticResource StartText}"
-                        Clicked="StartStopButton_OnClicked"/>
+                        Text="{Binding MainTimerButtonText}"
+                        Command="{Binding StartStopButtonCommand}"/>
             </Grid>
             <!-- bottom pane -->
             <ScrollView>
-                <VerticalStackLayout Spacing="50">
+               <CollectionView
+                   ItemsSource="{Binding WorkItems}"
+                   ItemsLayout="VerticalGrid,1">
+                   
+                   <CollectionView.ItemTemplate>
+                       <DataTemplate x:DataType="localnsmodel:WorkItem">
+                           <Grid>
+                               <Grid.ColumnDefinitions>
+                                   <ColumnDefinition Width="100"></ColumnDefinition>
+                                   <ColumnDefinition Width="100"></ColumnDefinition>
+                                   <ColumnDefinition Width="*"></ColumnDefinition>
+                               </Grid.ColumnDefinitions>
+                               <Label Grid.Column="0" Text="{Binding StartTime}"></Label>
+                               <Label Grid.Column="1" Text="{Binding RecordedTime}"></Label>
+                               <Label Grid.Column="2" Text="{Binding Title}"></Label>
+                           </Grid>
+                       </DataTemplate>
+                   </CollectionView.ItemTemplate>
+               </CollectionView>
 
-                    <Image
-                        Source="dotnet_bot.png"
-                        SemanticProperties.Description="Cute dot net bot waving hi to you!"
-                        HeightRequest="200"
-                        HorizontalOptions="Center" />
-
-                    <Label
-                        Text="Hello, World!"
-                        SemanticProperties.HeadingLevel="Level1"
-                        FontSize="32"
-                        HorizontalOptions="Center" />
-
-                    <Label
-                        Text="Welcome to .NET Multi-platform App UI"
-                        SemanticProperties.HeadingLevel="Level2"
-                        SemanticProperties.Description="Welcome to dot net Multi platform App U I"
-                        FontSize="18"
-                        HorizontalOptions="Center" />
-
-                    <Button
-                        x:Name="CounterBtn"
-                        Text="Click me"
-                        SemanticProperties.Hint="Counts the number of times you click"
-                       
-                        HorizontalOptions="Center" />
-
-                    <!-- target properties per platform -->
-                    <Label>
-                        <Label.Text>
-                            <OnPlatform x:TypeArguments="system:String">
-                                <On Platform="iOS" Value="iPhone" />
-                                <On Platform="Android" Value="Android" />
-                                <On Platform="WinUI" Value="Windows" />
-                            </OnPlatform>
-                        </Label.Text>
-                    </Label>
-                    
-                    <!-- resources properties per platform -->
-                    <Label>
-                        <Label.Resources>
-                            <OnPlatform x:Key="PlatformName" x:TypeArguments="system:String">
-                                <On Platform="iOS" Value="[iOS]" />
-                                <On Platform="Android" Value="[ANdroid]" />
-                                <On Platform="WinUI" Value="[Windows]" />
-                                <On Platform="MacCatalyst" Value="[macOS]" />
-                            </OnPlatform>
-                        </Label.Resources>
-                        <Label.Text>{StaticResource PlatformName}</Label.Text>
-                    </Label>
-                        
-                    
-                    <!-- target properties per platform, abbreviated form, type implied -->
-                    <Label Text="{OnPlatform WinUI='(Windows)', iOS='(iOS)', Default='(other)'}" />
-                    
-                    <!-- reference local namespace content -->
-                    <HorizontalStackLayout>
-                        <Label Text="Application name:" />
-                        <Label Text="{x:Static Member=localns:SharedResources.ApplicationName}" />
-                    </HorizontalStackLayout>
-                </VerticalStackLayout>
             </ScrollView>
         </VerticalStackLayout>
     </ContentView>
