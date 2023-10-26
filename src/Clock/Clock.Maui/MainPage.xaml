@@ -50,11 +50,20 @@
             <ScrollView>
                <CollectionView
                    ItemsSource="{Binding WorkItems}"
-                   ItemsLayout="VerticalGrid,2">
+                   ItemsLayout="VerticalGrid,1">
                    
                    <CollectionView.ItemTemplate>
                        <DataTemplate x:DataType="localnsmodel:WorkItem">
-                           <Label Text="{Binding StartTime}"></Label>
+                           <Grid>
+                               <Grid.ColumnDefinitions>
+                                   <ColumnDefinition Width="100"></ColumnDefinition>
+                                   <ColumnDefinition Width="100"></ColumnDefinition>
+                                   <ColumnDefinition Width="*"></ColumnDefinition>
+                               </Grid.ColumnDefinitions>
+                               <Label Grid.Column="0" Text="{Binding StartTime}"></Label>
+                               <Label Grid.Column="1" Text="{Binding RecordedTime}"></Label>
+                               <Label Grid.Column="2" Text="{Binding Title}"></Label>
+                           </Grid>
                        </DataTemplate>
                    </CollectionView.ItemTemplate>
                </CollectionView>
