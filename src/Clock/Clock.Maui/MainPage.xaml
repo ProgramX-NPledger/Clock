@@ -68,8 +68,8 @@
                                    <ColumnDefinition Width="100"></ColumnDefinition>
                                    <ColumnDefinition Width="*"></ColumnDefinition>
                                </Grid.ColumnDefinitions>
-                               <Label Grid.Column="0" Text="{Binding StartTime}"></Label>
-                               <Label Grid.Column="1" Text="{Binding RecordedTime}"></Label>
+                               <Label Grid.Column="0" Text="{Binding StartTime, StringFormat='{0:hh\\:mm}'}"></Label>
+                               <Label Grid.Column="1" Text="{Binding RecordedTime, StringFormat='{0:hh\\:mm}'}"></Label>
                                <Label Grid.Column="2" Text="{Binding Title}"></Label>
                            </Grid>
                        </DataTemplate>
