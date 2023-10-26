@@ -16,13 +16,13 @@ public class MainViewModel : INotifyPropertyChanged
 	private string _mainTimerButtonText;
 	private bool _isMainTimerRunning;
 	private ObservableCollection<WorkItemGroupByDate> _workItems;
-	
+
 	public event EventHandler<EventArgs> RequestMainTimerStart;
 	public event EventHandler<EventArgs> RequestMainTimerStop;
 	public event EventHandler<EventArgs> RequestLoadLatestPersistedWorkItems;
 	public event PropertyChangedEventHandler PropertyChanged;
 	public event EventHandler<WorkItemEventArgs> WorkItemAdded;
-	
+
 
 	public ObservableCollection<WorkItemGroupByDate> WorkItems
 	{
@@ -36,7 +36,7 @@ public class MainViewModel : INotifyPropertyChanged
 			}
 		}
 	}
-	
+
 	public bool IsMainTimerRunning
 	{
 		get => _isMainTimerRunning;
@@ -49,7 +49,7 @@ public class MainViewModel : INotifyPropertyChanged
 			}
 		}
 	}
-	
+
 
 	public DateTime MainTimerLastStartedAt
 	{
@@ -63,7 +63,7 @@ public class MainViewModel : INotifyPropertyChanged
 			}
 		}
 	}
-	
+
 	public string MainTimerButtonText
 	{
 		get => _mainTimerButtonText;
@@ -76,7 +76,7 @@ public class MainViewModel : INotifyPropertyChanged
 			}
 		}
 	}
-	
+
 	public TimeSpan MainTimerValue
 	{
 		get => _mainTimerValue;
@@ -102,23 +102,17 @@ public class MainViewModel : INotifyPropertyChanged
 			}
 		}
 	}
-	
+
 	public ICommand StartStopButtonCommand { get; private set; }
 	public ICommand LoadLatestPersistedWorkItemsCommand { get; private set; }
-	
-	
-	
+
+
+
 	// MVVM requires a default constructor
 	public MainViewModel()
 	{
-		StartStopButtonCommand = new Command(() =>
-		{
-			StopOrStartMainClock();
-		});
-		LoadLatestPersistedWorkItemsCommand = new Command(() =>
-		{
-			OnRequestLoadLatestPersistedWorkItems();
-		});
+		StartStopButtonCommand = new Command(() => { StopOrStartMainClock(); });
+		LoadLatestPersistedWorkItemsCommand = new Command(() => { OnRequestLoadLatestPersistedWorkItems(); });
 	}
 
 
@@ -131,19 +125,19 @@ public class MainViewModel : INotifyPropertyChanged
 
 	protected virtual void OnRequestMainTimerStart(EventArgs e)
 	{
-		if (RequestMainTimerStart != null) RequestMainTimerStart(this,e);
+		if (RequestMainTimerStart != null) RequestMainTimerStart(this, e);
 	}
 
 	protected virtual void OnRequestMainTimerStop(EventArgs e)
 	{
-		if (RequestMainTimerStop != null) RequestMainTimerStop(this,e);
+		if (RequestMainTimerStop != null) RequestMainTimerStop(this, e);
 	}
-	
+
 	protected virtual void OnRequestLoadLatestPersistedWorkItems()
 	{
 		RequestLoadLatestPersistedWorkItems?.Invoke(this, EventArgs.Empty);
 	}
-	
+
 	// protected bool SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
 	// {
 	// 	if (EqualityComparer<T>.Default.Equals(field, value)) return false;
@@ -151,79 +145,82 @@ public class MainViewModel : INotifyPropertyChanged
 	// 	OnPropertyChanged(propertyName);
 	// 	return true;
 	// }
-	
-  
 
-    private void StopOrStartMainClock()
-    {
-        if (IsMainTimerRunning)
-        {
-            StopMainClock();
-            AddCurrentWorkItemToDatabase();
-        }
-        else
-        {
-            StartMainClock();
-        }
-    }
 
-    private void AddCurrentWorkItemToDatabase()
-    {
-	    WorkItem workItem = new WorkItem()
-	    {
-		    Title = WorkItemEntry,
-		    RecordedTime = MainTimerValue,
-		    StartTime = _mainTimerLastStartedAt,
-		    StopTime = DateTime.Now
-	    };
 
-	    WorkItemGroupByDate todaysWorkItemsGroup = WorkItems.SingleOrDefault(q => q.Date == DateTime.Now.Date);
-	    if (todaysWorkItemsGroup == null)
-	    {
-		    // today isn't in the list yet, so create it and add it
-		    WorkItems.Insert(0,
-			    new WorkItemGroupByDate("Today",
-				    DateTime.Now.Date,
-				    new ObservableCollection<WorkItem>(
-					    new WorkItem[]
-						    {
-								workItem
-							}
-				    )
-			    )
+	private void StopOrStartMainClock()
+	{
+		if (IsMainTimerRunning)
+		{
+			StopMainClock();
+			AddCurrentWorkItemToDatabase();
+			
+			WorkItemEntry = string.Empty;
+		}
+		else
+		{
+			StartMainClock();
+		}
+	}
+
+	private void AddCurrentWorkItemToDatabase()
+	{
+		WorkItem workItem = new WorkItem()
+		{
+			Title = WorkItemEntry,
+			RecordedTime = MainTimerValue,
+			StartTime = _mainTimerLastStartedAt,
+			StopTime = DateTime.Now
+		};
+
+		WorkItemGroupByDate todaysWorkItemsGroup = WorkItems.SingleOrDefault(q => q.Date == DateTime.Now.Date);
+		if (todaysWorkItemsGroup == null)
+		{
+			// today isn't in the list yet, so create it and add it
+			WorkItems.Insert(0,
+				new WorkItemGroupByDate("Today",
+					DateTime.Now.Date,
+					new ObservableCollection<WorkItem>(
+						new WorkItem[]
+						{
+							workItem
+						}
+					)
+				)
 			);
-	    }
-	    else
-	    {
-		    todaysWorkItemsGroup.Insert(0,workItem);
-	    }
-	    OnWorkItemAdded(new WorkItemEventArgs()
-	    {
-		    WorkItem = workItem
-	    });
-    }
-    
+		}
+		else
+		{
+			todaysWorkItemsGroup.Insert(0, workItem);
+		}
 
-    private void StartMainClock()
-    {
-        MainTimerButtonText = "Stop";
-        
-        MainTimerLastStartedAt = DateTime.Now;
-        IsMainTimerRunning = true;
-        OnRequestMainTimerStart(EventArgs.Empty);
-    }
+		OnWorkItemAdded(new WorkItemEventArgs()
+		{
+			WorkItem = workItem
+		});
+	}
 
-    private void StopMainClock()
-    {
+
+	private void StartMainClock()
+	{
+		MainTimerButtonText = "Stop";
+
+		MainTimerLastStartedAt = DateTime.Now;
+		IsMainTimerRunning = true;
+		OnRequestMainTimerStart(EventArgs.Empty);
+	}
+
+	private void StopMainClock()
+	{
 		OnRequestMainTimerStop(EventArgs.Empty);
-        WorkItemEntry = string.Empty;
-        IsMainTimerRunning = false;
-        MainTimerButtonText = "Start";
-    }
+		IsMainTimerRunning = false;
+		MainTimerButtonText = "Start";
+	}
 
 
-    protected virtual void OnWorkItemAdded(WorkItemEventArgs e)
-    {
-	    WorkItemAdded?.Invoke(this, e);
-    }
+	protected virtual void OnWorkItemAdded(WorkItemEventArgs e)
+	{
+		WorkItemAdded?.Invoke(this, e);
+	}
+
 }
