@@ -177,7 +177,7 @@ public class MainViewModel : INotifyPropertyChanged
 		    StopTime = DateTime.Now
 	    };
 	    
-	    WorkItems.Add(workItem);
+	    WorkItems.Insert(0,workItem);
 	    OnWorkItemAdded(new WorkItemEventArgs()
 	    {
 		    WorkItem = workItem
