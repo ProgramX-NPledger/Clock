@@ -34,7 +34,12 @@ public partial class MainPage : ContentPage
         {
             await App.WorkItemRepository.AddCurrentWorkItemToDatabase(e.WorkItem);
         };
-
+        viewModel.RequestOpenReportDialog+=(s,e) =>
+            {
+                var reportDialogWindow = new Window(new ReportPage());
+                Application.Current?.OpenWindow(reportDialogWindow);
+            }
+        ;
     }
 
     private ObservableCollection<WorkItemGroupByDate> GroupByDate(IEnumerable<WorkItem> workItems)

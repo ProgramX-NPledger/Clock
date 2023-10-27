@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Clock.Maui.ReportPage"
+             >
+    <ContentPage.Content>
+        <ContentView>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <VerticalStackLayout Grid.Column="0">
+                    <Border Padding="5" Margin="5">
+                        <Border.Content>
+                            <VerticalStackLayout>
+                                <Label Text="Output format" FontAttributes="Bold" />
+                                <RadioButton GroupName="Format" Content="Tab-separated (TSV)" />
+                                <RadioButton GroupName="Format" Content="Comma-separated (CSV)" />
+                            </VerticalStackLayout>
+                        </Border.Content>
+                    </Border>
+                    <Border Padding="5" Margin="5">
+                        <VerticalStackLayout>
+                            <Label Text="Options" FontAttributes="Bold" />
+                            <HorizontalStackLayout>
+                                <CheckBox VerticalOptions="Center"></CheckBox>
+                                <Label VerticalOptions="Center" Text="Begin each line with a bullet" />
+                            </HorizontalStackLayout>
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Padding="5" Margin="5">
+                        <VerticalStackLayout>
+                            <Label Text="Fields" FontAttributes="Bold" />
+                            <HorizontalStackLayout>
+                                <CheckBox VerticalOptions="Center"></CheckBox>
+                                <Label VerticalOptions="Center" Text="Start time" />
+                            </HorizontalStackLayout>
+                            <HorizontalStackLayout>
+                                <CheckBox VerticalOptions="Center"></CheckBox>
+                                <Label VerticalOptions="Center" Text="Stop time" />
+                            </HorizontalStackLayout>
+                            <HorizontalStackLayout>
+                                <CheckBox VerticalOptions="Center"></CheckBox>
+                                <Label VerticalOptions="Center" Text="Recorded time" />
+                            </HorizontalStackLayout>
+                            <HorizontalStackLayout>
+                                <CheckBox VerticalOptions="Center"></CheckBox>
+                                <Label VerticalOptions="Center" Text="Title" />
+                            </HorizontalStackLayout>
+                        </VerticalStackLayout>
+                    </Border>
+                    <Button Margin="5" Text="Generate &gt;" />
+                </VerticalStackLayout>
+                <Entry Grid.Column="1" />
+            </Grid>    
+        </ContentView>
+    </ContentPage.Content>
+</ContentPage>

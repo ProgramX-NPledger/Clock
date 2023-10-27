@@ -18,6 +18,14 @@
     <ContentPage.Behaviors>
         <localnsbehaviours:ContentPageLoadedEventToCommandBehaviour />
     </ContentPage.Behaviors>
+    <ContentPage.MenuBarItems>
+        <MenuBarItem Text="File">
+            <MenuFlyoutItem Text="Create report ..." Command="{Binding DisplayReportDialogCommand}"></MenuFlyoutItem>
+        </MenuBarItem>
+        <MenuBarItem Text="Help">
+            <MenuFlyoutItem Text="About ..."></MenuFlyoutItem>
+        </MenuBarItem>
+    </ContentPage.MenuBarItems>
     <ContentView>
         <VerticalStackLayout>
             <!-- top pane -->
