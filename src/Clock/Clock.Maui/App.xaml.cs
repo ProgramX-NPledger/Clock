@@ -10,8 +10,11 @@ public partial class App : Application
     {
         InitializeComponent();
 
-        MainPage = new AppShell();
-
+        //MainPage = new AppShell();
+        MainPage = new NavigationPage(new MainPage())
+        {
+            
+        };
         WorkItemRepository = workItemRepository;
     }
 }

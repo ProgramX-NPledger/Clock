@@ -36,8 +36,12 @@ public partial class MainPage : ContentPage
         };
         viewModel.RequestOpenReportDialog+=(s,e) =>
             {
-                var reportDialogWindow = new Window(new ReportPage());
-                Application.Current?.OpenWindow(reportDialogWindow);
+                ReportPage reportPage = new ReportPage();
+                // Window reportDialogWindow = new Window(reportPage);
+                // Application.Current?.OpenWindow(reportDialogWindow);
+                // reportDialogWindow.Navigation.PushModalAsync(reportPage);
+                Navigation.PushModalAsync(reportPage);
+                //
             }
         ;
     }
