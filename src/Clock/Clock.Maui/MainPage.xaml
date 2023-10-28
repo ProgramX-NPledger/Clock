@@ -6,7 +6,8 @@
              xmlns:localnsmodel="clr-namespace:Clock.Maui.Model"
              xmlns:localnsviewmodel="clr-namespace:Clock.Maui.ViewModel"
              xmlns:localnsbehaviours="clr-namespace:Clock.Maui.Behaviour"
-             x:Class="Clock.Maui.MainPage">
+             x:Class="Clock.Maui.MainPage"
+             >
     <ContentPage.Resources>
         <ResourceDictionary>
             <x:String x:Key="Timer">0:00:00</x:String>

@@ -6,6 +6,7 @@
              xmlns:localnsviewmodel="clr-namespace:Clock.Maui.ViewModel"
              xmlns:localnsbehaviours="clr-namespace:Clock.Maui.Behaviour"
              x:Class="Clock.Maui.ReportPage"
+             Title="Report"
              >
     <ContentPage.BindingContext>
         <localnsviewmodel:ReportViewModel></localnsviewmodel:ReportViewModel>
@@ -15,9 +16,13 @@
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"></ColumnDefinition>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <VerticalStackLayout Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                </Grid.RowDefinitions>
+                <VerticalStackLayout Grid.Column="0" Grid.Row="0">
                     <Border Padding="5" Margin="5">
                         <Border.Content>
                             <VerticalStackLayout>
@@ -26,15 +31,6 @@
                                 <RadioButton GroupName="Format" Content="Comma-separated (CSV)" IsChecked="{Binding ReportFormatCsv}" />
                             </VerticalStackLayout>
                         </Border.Content>
-                    </Border>
-                    <Border Padding="5" Margin="5">
-                        <VerticalStackLayout>
-                            <Label Text="Options" FontAttributes="Bold" />
-                            <HorizontalStackLayout>
-                                <CheckBox VerticalOptions="Center" IsChecked="{Binding BeginEachLineWithABullet, Mode=TwoWay}"></CheckBox>
-                                <Label VerticalOptions="Center" Text="Begin each line with a bullet" />
-                            </HorizontalStackLayout>
-                        </VerticalStackLayout>
                     </Border>
                     <Border Padding="5" Margin="5">
                         <VerticalStackLayout>
@@ -57,9 +53,21 @@
                             </HorizontalStackLayout>
                         </VerticalStackLayout>
                     </Border>
-                    <Button Margin="5" Text="Generate &gt;" Command="{Binding GenerateButtonCommand}" />
                 </VerticalStackLayout>
-                <Entry Grid.Column="1" Text="{Binding GeneratedText}" />
+                <VerticalStackLayout Grid.Column="1" Grid.Row="0">
+                    <Border Padding="5" Margin="5">
+                        <VerticalStackLayout>
+                            <Label Text="Options" FontAttributes="Bold" />
+                            <HorizontalStackLayout>
+                                <CheckBox VerticalOptions="Center" IsChecked="{Binding BeginEachLineWithABullet, Mode=TwoWay}"></CheckBox>
+                                <Label VerticalOptions="Center" Text="Begin each line with a bullet" />
+                            </HorizontalStackLayout>
+                        </VerticalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+                <HorizontalStackLayout Grid.Column="0" Grid.Row="0" Grid.RowSpan="2">
+                    <Button Margin="5" Text="Generate &gt;" Command="{Binding GenerateButtonCommand}" />
+                </HorizontalStackLayout>
             </Grid>    
         </ContentView>
     </ContentPage.Content>

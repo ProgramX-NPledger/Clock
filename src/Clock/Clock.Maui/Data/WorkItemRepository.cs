@@ -26,7 +26,15 @@ public class WorkItemRepository
 		List<WorkItem> results=await sqLiteConnection.Table<WorkItem>().OrderByDescending(q => q.StopTime).Take(lastN).ToListAsync();
 		return results.ToArray();
 	}
-	
+
+	internal async Task<IEnumerable<WorkItem>> GetWorkItems(WorkItemCriteria criteria)
+	{
+		SQLiteAsyncConnection sqLiteConnection = await GetSqLiteConnection();
+		AsyncTableQuery<WorkItem> results = sqLiteConnection.Table<WorkItem>();
+		WorkItem[] executedResults = await results.ToArrayAsync();
+		return executedResults;
+	}
+
 	internal async Task AddCurrentWorkItemToDatabase(WorkItem workItem)
 	{
 		SQLiteAsyncConnection sqLiteConnection = await GetSqLiteConnection();

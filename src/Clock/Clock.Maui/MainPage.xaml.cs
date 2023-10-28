@@ -40,8 +40,8 @@ public partial class MainPage : ContentPage
                 // Window reportDialogWindow = new Window(reportPage);
                 // Application.Current?.OpenWindow(reportDialogWindow);
                 // reportDialogWindow.Navigation.PushModalAsync(reportPage);
-                Navigation.PushModalAsync(reportPage);
-                //
+                Navigation.PushAsync(reportPage); // using Modal removes Back button
+                
             }
         ;
     }

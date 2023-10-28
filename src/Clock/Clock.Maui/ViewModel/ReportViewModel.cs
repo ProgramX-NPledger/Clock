@@ -1,13 +1,15 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using Clock.Maui.Model;
 
 namespace Clock.Maui.ViewModel;
 
 public class ReportViewModel : INotifyPropertyChanged
 {
 	public event PropertyChangedEventHandler PropertyChanged;
-
+	public event EventHandler<ReportEventArgs> ReportRequired;
+		
 	private bool _beginEachLineWithABullet;
 	private bool _includeFieldsStartTime;
 	private bool _includeFieldsStopTime;
@@ -15,7 +17,6 @@ public class ReportViewModel : INotifyPropertyChanged
 	private bool _includeFieldsTitle;
 	private bool _reportFormatTsv;
 	private bool _reportFormatCsv;
-	private string _generatedText;
 
 	public bool ReportFormatTsv
 	{
@@ -38,19 +39,6 @@ public class ReportViewModel : INotifyPropertyChanged
 			if (_reportFormatCsv != value)
 			{
 				_reportFormatCsv = value;
-				OnPropertyChanged();
-			}
-		}
-	}
-	
-	public string GeneratedText
-	{
-		get => _generatedText;
-		set
-		{
-			if (_generatedText != value)
-			{
-				_generatedText = value;
 				OnPropertyChanged();
 			}
 		}
@@ -131,7 +119,36 @@ public class ReportViewModel : INotifyPropertyChanged
 
 	private void GenerateText()
 	{
-		GeneratedText = $"Hello {(ReportFormatCsv ? "CSV" : (ReportFormatTsv ? "TSV" : "????"))}";
+		// raise an event to have the consuming code-behind generate the data
+		
+		ReportEventArgs reportEventArgs = new ReportEventArgs()
+		{
+			Options = new ReportOptions()
+			{
+				IncludeBullets = BeginEachLineWithABullet,
+				IncludeFields = GetIncludedFields()
+			},
+			ReportFormat = GetReportFormat()
+		};
+		ReportRequired?.Invoke(this,reportEventArgs);
+
+	}
+
+	private ReportFormat GetReportFormat()
+	{
+		if (ReportFormatCsv) return ReportFormat.Csv;
+		if (ReportFormatTsv) return ReportFormat.Tsv;
+		throw new InvalidOperationException("Invalid report format");
+	}
+
+	private string[] GetIncludedFields()
+	{
+		List<string> fields = new List<string>();
+		if (IncludeFieldsTitle) fields.Add("Title");
+		if (IncludeFieldsRecordedTime) fields.Add("RecordedTime");
+		if (IncludeFieldsStopTime) fields.Add("StopTime");
+		if (IncludeFieldsStartTime) fields.Add("StartTime");
+		return fields.ToArray();
 	}
 
 	protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

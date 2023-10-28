@@ -9,12 +9,7 @@ public partial class App : Application
     public App(WorkItemRepository workItemRepository)
     {
         InitializeComponent();
-
-        //MainPage = new AppShell();
-        MainPage = new NavigationPage(new MainPage())
-        {
-            
-        };
+        MainPage = new NavigationPage(new MainPage());
         WorkItemRepository = workItemRepository;
     }
 }
