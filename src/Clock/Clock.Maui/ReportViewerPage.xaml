@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:localnsmodel="clr-namespace:Clock.Maui.Model"
+             xmlns:localnsviewmodel="clr-namespace:Clock.Maui.ViewModel"
+             xmlns:localnsbehaviours="clr-namespace:Clock.Maui.Behaviour"
+             x:Class="Clock.Maui.ReportViewerPage"
+             Title="View Report">
+    <ContentPage.BindingContext>
+        <localnsviewmodel:ReportViewerPageViewModel></localnsviewmodel:ReportViewerPageViewModel>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Entry Grid.Row="0"
+                   IsReadOnly="True"
+                   Text="{Binding ReportText}" />
+            <HorizontalStackLayout Grid.Row="1">
+                <Button Margin="5" Text="Copy to Clipboard" IsEnabled="False" HorizontalOptions="End" />
+                <Button Margin="5" Text="Save to File" IsEnabled="False" HorizontalOptions="End" />
+                <Button Margin="5" Text="Close" Command="{Binding OkCommand}" HorizontalOptions="End" />
+            </HorizontalStackLayout>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

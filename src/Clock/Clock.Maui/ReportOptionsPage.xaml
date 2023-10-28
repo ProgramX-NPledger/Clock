@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:localnsmodel="clr-namespace:Clock.Maui.Model"
+             xmlns:localnsviewmodel="clr-namespace:Clock.Maui.ViewModel"
+             xmlns:localnsbehaviours="clr-namespace:Clock.Maui.Behaviour"
+             x:Class="Clock.Maui.ReportOptionsPage"
+             Title="Report Options"
+             >
+    <ContentPage.BindingContext>
+        <localnsviewmodel:ReportOptionsViewModel></localnsviewmodel:ReportOptionsViewModel>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <ContentView>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                </Grid.RowDefinitions>
+                <VerticalStackLayout Grid.Column="0" Grid.Row="0">
+                    <Border Padding="5" Margin="5">
+                        <Border.Content>
+                            <VerticalStackLayout>
+                                <Label Text="Output format" FontAttributes="Bold" />
+                                <RadioButton GroupName="Format" Content="Tab-separated (TSV)" IsChecked="{Binding ReportFormatTsv}" />
+                                <RadioButton GroupName="Format" Content="Comma-separated (CSV)" IsChecked="{Binding ReportFormatCsv}" />
+                            </VerticalStackLayout>
+                        </Border.Content>
+                    </Border>
+                    <Border Padding="5" Margin="5">
+                        <VerticalStackLayout>
+                            <Label Text="Options" FontAttributes="Bold" />
+                            <HorizontalStackLayout>
+                                <CheckBox VerticalOptions="Center" IsChecked="{Binding BeginEachLineWithABullet, Mode=TwoWay}"></CheckBox>
+                                <Label VerticalOptions="Center" Text="Begin each line with a bullet" />
+                            </HorizontalStackLayout>
+                            <HorizontalStackLayout>
+                                <CheckBox VerticalOptions="Center" IsChecked="{Binding QuoteFieldsWithSpaces, Mode=TwoWay}"></CheckBox>
+                                <Label VerticalOptions="Center" Text="Quote fields where there is a space character" />
+                            </HorizontalStackLayout>
+                        </VerticalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+                <VerticalStackLayout Grid.Column="1" Grid.Row="0">
+                    <Border Padding="5" Margin="5">
+                        <VerticalStackLayout>
+                            <Label Text="Include fields" FontAttributes="Bold" />
+                            <HorizontalStackLayout>
+                                <CheckBox VerticalOptions="Center" IsChecked="{Binding IncludeFieldsStartTime, Mode=TwoWay}"></CheckBox>
+                                <Label VerticalOptions="Center" Text="Start time" />
+                            </HorizontalStackLayout>
+                            <HorizontalStackLayout>
+                                <CheckBox VerticalOptions="Center" IsChecked="{Binding IncludeFieldsStopTime, Mode=TwoWay}"></CheckBox>
+                                <Label VerticalOptions="Center" Text="Stop time" />
+                            </HorizontalStackLayout>
+                            <HorizontalStackLayout>
+                                <CheckBox VerticalOptions="Center" IsChecked="{Binding IncludeFieldsRecordedTime, Mode=TwoWay}"></CheckBox>
+                                <Label VerticalOptions="Center" Text="Recorded time" />
+                            </HorizontalStackLayout>
+                            <HorizontalStackLayout>
+                                <CheckBox VerticalOptions="Center" IsChecked="{Binding IncludeFieldsTitle, Mode=TwoWay}"></CheckBox>
+                                <Label VerticalOptions="Center" Text="Title" />
+                            </HorizontalStackLayout>
+                        </VerticalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+                <HorizontalStackLayout Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
+                    <Button Margin="5" Text="Generate &gt;" Command="{Binding GenerateButtonCommand}" HorizontalOptions="End" />
+                </HorizontalStackLayout>
+            </Grid>    
+        </ContentView>
+    </ContentPage.Content>
+</ContentPage>

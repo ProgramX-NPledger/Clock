@@ -23,6 +23,7 @@ public class MainViewModel : INotifyPropertyChanged
 	public event PropertyChangedEventHandler PropertyChanged;
 	public event EventHandler<WorkItemEventArgs> WorkItemAdded;
 
+	public event EventHandler<EventArgs> RequestOpenReportDialog; 
 
 	public ObservableCollection<WorkItemGroupByDate> WorkItems
 	{
@@ -106,6 +107,7 @@ public class MainViewModel : INotifyPropertyChanged
 	public ICommand StartStopButtonCommand { get; private set; }
 	public ICommand LoadLatestPersistedWorkItemsCommand { get; private set; }
 
+	public ICommand DisplayReportDialogCommand { get; private set; }
 
 
 	// MVVM requires a default constructor
@@ -113,6 +115,7 @@ public class MainViewModel : INotifyPropertyChanged
 	{
 		StartStopButtonCommand = new Command(() => { StopOrStartMainClock(); });
 		LoadLatestPersistedWorkItemsCommand = new Command(() => { OnRequestLoadLatestPersistedWorkItems(); });
+		DisplayReportDialogCommand = new Command(() => { OnRequestOpenReportDialog(); });
 	}
 
 
@@ -223,4 +226,8 @@ public class MainViewModel : INotifyPropertyChanged
 		WorkItemAdded?.Invoke(this, e);
 	}
 
+	protected virtual void OnRequestOpenReportDialog()
+	{
+		RequestOpenReportDialog?.Invoke(this, EventArgs.Empty);
+	}
 }
