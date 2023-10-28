@@ -36,7 +36,7 @@ public partial class MainPage : ContentPage
         };
         viewModel.RequestOpenReportDialog+=(s,e) =>
             {
-                ReportPage reportPage = new ReportPage();
+                ReportOptionsPage reportPage = new ReportOptionsPage();
                 // Window reportDialogWindow = new Window(reportPage);
                 // Application.Current?.OpenWindow(reportDialogWindow);
                 // reportDialogWindow.Navigation.PushModalAsync(reportPage);

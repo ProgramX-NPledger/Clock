@@ -5,7 +5,7 @@ using Clock.Maui.Model;
 
 namespace Clock.Maui.ViewModel;
 
-public class ReportViewModel : INotifyPropertyChanged
+public class ReportOptionsViewModel : INotifyPropertyChanged
 {
 	public event PropertyChangedEventHandler PropertyChanged;
 	public event EventHandler<ReportEventArgs> ReportRequired;
@@ -111,7 +111,7 @@ public class ReportViewModel : INotifyPropertyChanged
 	
 	public ICommand GenerateButtonCommand { get; private set; }
 
-	public ReportViewModel()
+	public ReportOptionsViewModel()
 	{
 		GenerateButtonCommand = new Command(() => { GenerateText(); });
 		
