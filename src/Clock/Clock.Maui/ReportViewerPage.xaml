@@ -17,11 +17,12 @@
                 <RowDefinition Height="Auto"></RowDefinition>
             </Grid.RowDefinitions>
             <Entry Grid.Row="0"
+                   IsReadOnly="True"
                    Text="{Binding ReportText}" />
             <HorizontalStackLayout Grid.Row="1">
-                <Button Text="Copy to Clipboard" IsEnabled="False" />
-                <Button Text="Save to File" IsEnabled="False" />
-                <Button Text="Close" Command="{Binding OkCommand}" />
+                <Button Margin="5" Text="Copy to Clipboard" IsEnabled="False" HorizontalOptions="End" />
+                <Button Margin="5" Text="Save to File" IsEnabled="False" HorizontalOptions="End" />
+                <Button Margin="5" Text="Close" Command="{Binding OkCommand}" HorizontalOptions="End" />
             </HorizontalStackLayout>
         </Grid>
     </ContentPage.Content>

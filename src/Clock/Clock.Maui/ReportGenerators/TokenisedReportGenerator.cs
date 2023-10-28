@@ -22,17 +22,24 @@ public class TokenisedReportGenerator : IReportGenerator
         StringBuilder sb = new StringBuilder();
         foreach (WorkItem workItem in workItems)
         {
-            sb.AppendLine(BuildCsvLineFromWorkItem(workItem));
+            sb.AppendLine(BuildLineFromWorkItem(workItem,reportOptions));
         }
         return sb.ToString();
     }
 
-    private string BuildCsvLineFromWorkItem(WorkItem workItem)
+    private string BuildLineFromWorkItem(WorkItem workItem, ReportOptions reportOptions)
     {
-        StringBuilder sb=new StringBuilder();
-
-        sb.Append($"{workItem.StartTime}{Token}{workItem.RecordedTime}{Token}{workItem.Title}");
+        List<string> fieldValues = new List<string>();
         
+        if (reportOptions.IncludeFields.Contains("StartTime")) fieldValues.Add(workItem.StartTime.ToString("g"));
+        if (reportOptions.IncludeFields.Contains("StopTime")) fieldValues.Add(workItem.StopTime.ToString("g"));
+        if (reportOptions.IncludeFields.Contains("RecordedTime")) fieldValues.Add(workItem.RecordedTime.ToString("c"));
+        if (reportOptions.IncludeFields.Contains("Title")) fieldValues.Add(reportOptions.QuoteFieldsWithSpaces ? $"\"{workItem.Title}\"" : workItem.Title);
+        
+        StringBuilder sb=new StringBuilder();
+        sb.Append(string.Join(_token, fieldValues));
+
+        if (reportOptions.IncludeBullets) sb.Insert(0, "* ");
         return sb.ToString();
     }
 

@@ -35,7 +35,7 @@ public partial class ReportOptionsPage : ContentPage
 			// Window reportDialogWindow = new Window(reportPage);
 			// Application.Current?.OpenWindow(reportDialogWindow);
 			// reportDialogWindow.Navigation.PushModalAsync(reportPage);
-			Navigation.PushAsync(reportViewerPage); // using Modal removes Back button
+			await Navigation.PushAsync(reportViewerPage); // using Modal removes Back button
 
 		};
 	}

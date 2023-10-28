@@ -34,6 +34,21 @@
                     </Border>
                     <Border Padding="5" Margin="5">
                         <VerticalStackLayout>
+                            <Label Text="Options" FontAttributes="Bold" />
+                            <HorizontalStackLayout>
+                                <CheckBox VerticalOptions="Center" IsChecked="{Binding BeginEachLineWithABullet, Mode=TwoWay}"></CheckBox>
+                                <Label VerticalOptions="Center" Text="Begin each line with a bullet" />
+                            </HorizontalStackLayout>
+                            <HorizontalStackLayout>
+                                <CheckBox VerticalOptions="Center" IsChecked="{Binding QuoteFieldsWithSpaces, Mode=TwoWay}"></CheckBox>
+                                <Label VerticalOptions="Center" Text="Quote fields where there is a space character" />
+                            </HorizontalStackLayout>
+                        </VerticalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+                <VerticalStackLayout Grid.Column="1" Grid.Row="0">
+                    <Border Padding="5" Margin="5">
+                        <VerticalStackLayout>
                             <Label Text="Include fields" FontAttributes="Bold" />
                             <HorizontalStackLayout>
                                 <CheckBox VerticalOptions="Center" IsChecked="{Binding IncludeFieldsStartTime, Mode=TwoWay}"></CheckBox>
@@ -54,19 +69,8 @@
                         </VerticalStackLayout>
                     </Border>
                 </VerticalStackLayout>
-                <VerticalStackLayout Grid.Column="1" Grid.Row="0">
-                    <Border Padding="5" Margin="5">
-                        <VerticalStackLayout>
-                            <Label Text="Options" FontAttributes="Bold" />
-                            <HorizontalStackLayout>
-                                <CheckBox VerticalOptions="Center" IsChecked="{Binding BeginEachLineWithABullet, Mode=TwoWay}"></CheckBox>
-                                <Label VerticalOptions="Center" Text="Begin each line with a bullet" />
-                            </HorizontalStackLayout>
-                        </VerticalStackLayout>
-                    </Border>
-                </VerticalStackLayout>
                 <HorizontalStackLayout Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
-                    <Button Margin="5" Text="Generate &gt;" Command="{Binding GenerateButtonCommand}" />
+                    <Button Margin="5" Text="Generate &gt;" Command="{Binding GenerateButtonCommand}" HorizontalOptions="End" />
                 </HorizontalStackLayout>
             </Grid>    
         </ContentView>

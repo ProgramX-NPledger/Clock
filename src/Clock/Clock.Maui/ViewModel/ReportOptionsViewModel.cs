@@ -17,7 +17,21 @@ public class ReportOptionsViewModel : INotifyPropertyChanged
 	private bool _includeFieldsTitle;
 	private bool _reportFormatTsv;
 	private bool _reportFormatCsv;
+	private bool _quoteFieldsWithSpaces;
 
+	public bool QuoteFieldsWithSpaces
+	{
+		get => _quoteFieldsWithSpaces;
+		set
+		{
+			if (_quoteFieldsWithSpaces != value)
+			{
+				_quoteFieldsWithSpaces = value;
+				OnPropertyChanged();
+			}
+		}
+	}
+	
 	public bool ReportFormatTsv
 	{
 		get => _reportFormatTsv;
@@ -126,6 +140,7 @@ public class ReportOptionsViewModel : INotifyPropertyChanged
 			Options = new ReportOptions()
 			{
 				IncludeBullets = BeginEachLineWithABullet,
+				QuoteFieldsWithSpaces = QuoteFieldsWithSpaces,
 				IncludeFields = GetIncludedFields()
 			},
 			ReportFormat = GetReportFormat()
