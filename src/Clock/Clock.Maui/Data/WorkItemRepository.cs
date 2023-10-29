@@ -31,6 +31,8 @@ public class WorkItemRepository
 	{
 		SQLiteAsyncConnection sqLiteConnection = await GetSqLiteConnection();
 		AsyncTableQuery<WorkItem> results = sqLiteConnection.Table<WorkItem>();
+		if (criteria.FromDateTime.HasValue) results = results.Where(q => q.StartTime >= criteria.FromDateTime);
+		if (criteria.ToDateTime.HasValue) results = results.Where(q => q.StartTime <= criteria.ToDateTime);
 		WorkItem[] executedResults = await results.ToArrayAsync();
 		return executedResults;
 	}
