@@ -69,8 +69,8 @@
                         </VerticalStackLayout>
                     </Border>
                 </VerticalStackLayout>
-                <HorizontalStackLayout Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
-                    <Button Margin="5" Text="Generate &gt;" Command="{Binding GenerateButtonCommand}" HorizontalOptions="End" />
+                <HorizontalStackLayout Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" FlowDirection="RightToLeft">
+                    <Button Margin="5" Text="Generate &gt;" Command="{Binding GenerateButtonCommand}" />
                 </HorizontalStackLayout>
             </Grid>    
         </ContentView>
