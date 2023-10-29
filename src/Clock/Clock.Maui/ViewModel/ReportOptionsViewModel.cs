@@ -18,7 +18,63 @@ public class ReportOptionsViewModel : INotifyPropertyChanged
 	private bool _reportFormatTsv;
 	private bool _reportFormatCsv;
 	private bool _quoteFieldsWithSpaces;
+	private bool _fromDateSelected;
+	private bool _toDateSelected;
+	private DateTime _fromDate;
+	private DateTime _toDate;
 
+	public bool FromDateSelected
+	{
+		get => _fromDateSelected;
+		set
+		{
+			if (_fromDateSelected != value)
+			{
+				_fromDateSelected = value;
+				OnPropertyChanged();
+			}
+		}
+	}
+
+	public bool ToDateSelected
+	{
+		get => _toDateSelected;
+		set
+		{
+			if (_toDateSelected != value)
+			{
+				_toDateSelected = value;
+				OnPropertyChanged();
+			}
+		}
+	}
+
+	public DateTime FromDate
+	{
+		get => _fromDate;
+		set
+		{
+			if (_fromDate != value)
+			{
+				_fromDate = value;
+				OnPropertyChanged();
+			}
+		}
+	}
+
+	public DateTime ToDate
+	{
+		get => _toDate;
+		set
+		{
+			if (_toDate != value)
+			{
+				_toDate = value;
+				OnPropertyChanged();
+			}
+		}
+	}
+	
 	public bool QuoteFieldsWithSpaces
 	{
 		get => _quoteFieldsWithSpaces;
@@ -141,7 +197,9 @@ public class ReportOptionsViewModel : INotifyPropertyChanged
 			{
 				IncludeBullets = BeginEachLineWithABullet,
 				QuoteFieldsWithSpaces = QuoteFieldsWithSpaces,
-				IncludeFields = GetIncludedFields()
+				IncludeFields = GetIncludedFields(),
+				FromDate = FromDateSelected ? FromDate : null,
+				ToDate = ToDateSelected ? ToDate : null
 			},
 			ReportFormat = GetReportFormat()
 		};

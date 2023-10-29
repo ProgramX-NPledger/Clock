@@ -34,6 +34,43 @@
                     </Border>
                     <Border Padding="5" Margin="5">
                         <VerticalStackLayout>
+                            <Label Text="Date range" FontAttributes="Bold" />
+                            <VerticalStackLayout>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"></RowDefinition>
+                                        <RowDefinition Height="Auto"></RowDefinition>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                        <ColumnDefinition Width="*"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox Grid.Row="0" Grid.Column="0" IsChecked="{Binding FromDateSelected, Mode=TwoWay}"></CheckBox>
+                                    <VerticalStackLayout Grid.Row="1" Grid.Column="1">
+                                        <Label VerticalOptions="Center" Text="From" />
+                                        <DatePicker Date="{Binding FromDate, Mode=TwoWay}"></DatePicker>
+                                    </VerticalStackLayout>                                    
+                                </Grid>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"></RowDefinition>
+                                        <RowDefinition Height="Auto"></RowDefinition>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                        <ColumnDefinition Width="*"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox Grid.Row="0" Grid.Column="0" IsChecked="{Binding ToDateSelected, Mode=TwoWay}"></CheckBox>
+                                    <VerticalStackLayout Grid.Row="1" Grid.Column="1">
+                                        <Label VerticalOptions="Center" Text="To" />
+                                        <DatePicker Date="{Binding ToDate, Mode=TwoWay}"></DatePicker>
+                                    </VerticalStackLayout>                                    
+                                </Grid>
+                            </VerticalStackLayout>
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Padding="5" Margin="5">
+                        <VerticalStackLayout>
                             <Label Text="Options" FontAttributes="Bold" />
                             <HorizontalStackLayout>
                                 <CheckBox VerticalOptions="Center" IsChecked="{Binding BeginEachLineWithABullet, Mode=TwoWay}"></CheckBox>

@@ -22,7 +22,8 @@ public partial class ReportOptionsPage : ContentPage
 			// get the report details
 			IEnumerable<WorkItem> workItems=await App.WorkItemRepository.GetWorkItems(new WorkItemCriteria()
 			{
-
+				FromDateTime = e.Options.FromDate,
+				ToDateTime = e.Options.ToDate
 			});
 			
 			// get a report generator
