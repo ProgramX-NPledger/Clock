@@ -53,4 +53,4 @@ jobs:
         uses: actions/upload-artifact@v3.1.0
         with:
           name: mauibeach-windows-ci-build
-          path: src/Clock/Clock.Maui/bin/Release/net7.0-windows10.0.19041.0/win10-x64/AppPackages/Clock*/Clock*.msix
+          path: src/Clock/Clock.Maui/bin/Debug/net7.0-windows10.0.19041.0/win10-x64/AppPackages/Clock*/Clock*.msix
