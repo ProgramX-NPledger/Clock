@@ -42,14 +42,10 @@
                 </Grid.Resources>
                 <Label Grid.Column="0" x:Name = "ClockLabel"
                        Style="{StaticResource TimerStyle}"
-<<<<<<< Updated upstream
-                       Text="{Binding MainTimerValue}"
                        FontFamily="ExoMedium"
                        FontSize="18"
-                       Padding="5,14,5,14"/>
-=======
+                       Padding="5,14,5,14"
                        Text="{Binding MainTimerValue, StringFormat='{0:hh\\:mm\\:ss}'}" />
->>>>>>> Stashed changes
                 <Entry Grid.Column="1" 
                        x:Name = "WorkItemEntry"
                        Text = "{Binding WorkItemEntry, Mode=TwoWay, FallbackValue='Work Item'}"
