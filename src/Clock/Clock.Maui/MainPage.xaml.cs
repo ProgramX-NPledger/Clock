@@ -1,8 +1,10 @@
 ﻿using System.Collections.ObjectModel;
 using Clock.Maui.Data;
 using Clock.Maui.Model;
+using Clock.Maui.Services;
 using Clock.Maui.ViewModel;
 using SQLite;
+using Preferences = Xamarin.Essentials.Preferences;
 
 namespace Clock.Maui;
 
@@ -44,6 +46,30 @@ public partial class MainPage : ContentPage
                 
             }
         ;
+        this.Loaded += async (s, e) =>
+        {
+            // check for updates
+
+            bool updatesEnabled = Preferences.Get(GitHubUpdateService.AUTOUPDATE_ENABLED_CONFIG_STRING,
+                                      false);
+            
+            // start service
+            if (updatesEnabled)
+            {
+                bool preferPreRelease = Preferences.Get(GitHubUpdateService.PREFER_PRERELEASE_CONFIG_STRING, false);
+                
+                GitHubUpdateService gitHubUpdateService = new GitHubUpdateService();
+                AvailableUpdateStatus latestUpdate = gitHubUpdateService.GetUpdateStatus(preferPreRelease);
+                if (latestUpdate.LatestAvailableVersion > latestUpdate.CurrentVersion)
+                {
+            
+                }
+                // service should have current version number
+                // and be able to get latest version for configured channel from GitHub
+                
+    
+            }
+        };
     }
 
     private ObservableCollection<WorkItemGroupByDate> GroupByDate(IEnumerable<WorkItem> workItems)
