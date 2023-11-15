@@ -1,4 +1,5 @@
 ﻿using Clock.Maui.Data;
+using Clock.Maui.Services;
 using Microsoft.Extensions.Logging;
 
 namespace Clock.Maui;
@@ -16,6 +17,7 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 fonts.AddFont("Exo-Medium.otf", "ExoMedium");
             });
+           
 
 #if DEBUG
         builder.Logging.AddDebug();
