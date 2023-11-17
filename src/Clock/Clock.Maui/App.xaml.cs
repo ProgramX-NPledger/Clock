@@ -18,12 +18,12 @@ public partial class App : Application
 
             bool updatesEnabled = Preferences.Get(GitHubUpdateService.AUTOUPDATE_ENABLED_CONFIG_STRING,
                 false);
-            
+            updatesEnabled = true;
             // start service
             if (updatesEnabled)
             {
                 bool preferPreRelease = Preferences.Get(GitHubUpdateService.PREFER_PRERELEASE_CONFIG_STRING, false);
-
+                preferPreRelease = true;
                 using (GitHubUpdateService gitHubUpdateService = new GitHubUpdateService())
                 {
                     AvailableUpdateStatus latestUpdate = await gitHubUpdateService.GetUpdateStatus(preferPreRelease);

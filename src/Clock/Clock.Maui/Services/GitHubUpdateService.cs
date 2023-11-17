@@ -2,7 +2,9 @@
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Collections.Generic;
+using System.Net.Http.Headers;
 using System.Reflection;
+using System.Text.Json.Nodes;
 using Clock.Maui.Model.GitHub;
 
 namespace Clock.Maui.Services;
@@ -17,7 +19,8 @@ public class GitHubUpdateService : IDisposable
     
     public GitHubUpdateService()
     {
-        _httpClient = new HttpClient();
+        HttpClientHandler httpClientHandler = new HttpClientHandler();
+        _httpClient = new HttpClient(httpClientHandler);
     }
 
     public async Task<AvailableUpdateStatus> GetUpdateStatus(bool allowPrerelease)
@@ -32,12 +35,31 @@ public class GitHubUpdateService : IDisposable
 
         };
 
-        IEnumerable<Release> releases;
+        IEnumerable<Release> releases=null;
         try
         {
-            releases =
-                await _httpClient.GetFromJsonAsync<IEnumerable<Release>>(url,
-                    new JsonSerializerOptions(JsonSerializerDefaults.Web));
+            HttpRequestMessage httpRequestMessage = new HttpRequestMessage()
+            {
+                RequestUri = new Uri(url),
+                Method = HttpMethod.Get
+            };
+            httpRequestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("*/*"));
+            //httpRequestMessage.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip, deflate, br"));
+            httpRequestMessage.Headers.Connection.Add("keep-alive");
+            httpRequestMessage.Headers.UserAgent.Add(new ProductInfoHeaderValue("Clock","0.0"));
+            
+            var task = _httpClient.SendAsync(httpRequestMessage)
+                .ContinueWith(async (taskwithmsg) =>
+                {
+                    HttpResponseMessage response = taskwithmsg.Result;
+
+                    releases = await response.Content.ReadFromJsonAsync<IEnumerable<Release>>();
+                });
+            task.Wait();
+            
+            // releases =
+            //     await _httpClient.GetFromJsonAsync<IEnumerable<Release>>(url,
+            //         new JsonSerializerOptions(JsonSerializerDefaults.Web));
         }
         catch (Exception e)
         {
