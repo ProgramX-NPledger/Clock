@@ -12,6 +12,9 @@ public class AvailableUpdateStatus
 
     public Exception Exception { get; set; }
 
+    public string DownloadUrl { get; set; }
+    
+
     public bool IsUpdateAvailable()
     {
         return CurrentVersion < LatestAvailableVersion;

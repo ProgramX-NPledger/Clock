@@ -6,6 +6,7 @@ using System.Net.Http.Headers;
 using System.Reflection;
 using System.Text.Json.Nodes;
 using Clock.Maui.Model.GitHub;
+using Newtonsoft.Json;
 
 namespace Clock.Maui.Services;
 
@@ -44,7 +45,6 @@ public class GitHubUpdateService : IDisposable
                 Method = HttpMethod.Get
             };
             httpRequestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("*/*"));
-            //httpRequestMessage.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip, deflate, br"));
             httpRequestMessage.Headers.Connection.Add("keep-alive");
             httpRequestMessage.Headers.UserAgent.Add(new ProductInfoHeaderValue("Clock","0.0"));
             
@@ -52,14 +52,10 @@ public class GitHubUpdateService : IDisposable
                 .ContinueWith(async (taskwithmsg) =>
                 {
                     HttpResponseMessage response = taskwithmsg.Result;
-
-                    releases = await response.Content.ReadFromJsonAsync<IEnumerable<Release>>();
+                    string releasesJson = await response.Content.ReadAsStringAsync();
+                    releases = JsonConvert.DeserializeObject<Release[]>(releasesJson);
                 });
             task.Wait();
-            
-            // releases =
-            //     await _httpClient.GetFromJsonAsync<IEnumerable<Release>>(url,
-            //         new JsonSerializerOptions(JsonSerializerDefaults.Web));
         }
         catch (Exception e)
         {
@@ -72,8 +68,16 @@ public class GitHubUpdateService : IDisposable
         // get latest version
         if (releases.Any())
         {
-            IEnumerable<Release> latestRelease = releases.OrderByDescending(q => q.PublishedAt).Take(1);
-            //availableUpdateStatus.LatestAvailableVersion = latestRelease.
+            Release latestRelease = releases.OrderByDescending(q => q.PublishedAt).FirstOrDefault();
+            availableUpdateStatus.CheckSuccessful = true;
+            availableUpdateStatus.LatestAvailableVersion = null;
+            availableUpdateStatus.IsPreRelease = latestRelease.IsPreRelease;
+            Asset downloadableAsset =
+                latestRelease.Assets.FirstOrDefault(q => q.ContentType == "application/x-zip-compressed");
+            if (downloadableAsset != null)
+            {
+                availableUpdateStatus.DownloadUrl = downloadableAsset.BrowserDownloadUrl;
+            }
         }
         else
         {
