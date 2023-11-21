@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Net.Http.Headers;
 using System.Reflection;
 using System.Text.Json.Nodes;
+using System.Text.RegularExpressions;
 using Clock.Maui.Model.GitHub;
 using Newtonsoft.Json;
 
@@ -70,13 +71,22 @@ public class GitHubUpdateService : IDisposable
         {
             Release latestRelease = releases.OrderByDescending(q => q.PublishedAt).FirstOrDefault();
             availableUpdateStatus.CheckSuccessful = true;
-            availableUpdateStatus.LatestAvailableVersion = null;
-            availableUpdateStatus.IsPreRelease = latestRelease.IsPreRelease;
-            Asset downloadableAsset =
-                latestRelease.Assets.FirstOrDefault(q => q.ContentType == "application/x-zip-compressed");
-            if (downloadableAsset != null)
+            if (latestRelease == null)
             {
-                availableUpdateStatus.DownloadUrl = downloadableAsset.BrowserDownloadUrl;
+                availableUpdateStatus.LatestAvailableVersion = availableUpdateStatus.CurrentVersion;
+                availableUpdateStatus.IsPreRelease = false;
+            }
+            else
+            {
+                availableUpdateStatus.LatestAvailableVersion = GetVersionNumberFromTag(latestRelease.TagName);
+                availableUpdateStatus.IsPreRelease = latestRelease.IsPreRelease;
+                Asset downloadableAsset =
+                    latestRelease.Assets.FirstOrDefault(q => q.ContentType == "application/x-zip-compressed");
+                if (downloadableAsset != null)
+                {
+                    availableUpdateStatus.DownloadUrl = downloadableAsset.BrowserDownloadUrl;
+                }
+                
             }
         }
         else
@@ -85,6 +95,32 @@ public class GitHubUpdateService : IDisposable
         }
 
         return availableUpdateStatus;
+    }
+
+    private Version GetVersionNumberFromTag(string latestReleaseTagName)
+    {
+        // version string looks like: 
+        string pattern = @"^v([0-9]\.[0.9]\.[0-9])\-([a-z0-9]+)(\.([0-9]*?))$";
+        RegexOptions options = RegexOptions.Singleline;
+
+        MatchCollection matches = Regex.Matches(latestReleaseTagName, pattern, options);
+        if (matches.Any())
+        {
+            Match firstMatch = matches.First();
+            if (firstMatch.Groups.Count > 2)
+            {
+                Group match2 = firstMatch.Groups[1]; // 	0.0.1
+                string versionAsString = $"{match2.Value}.0";
+                if (Version.TryParse(versionAsString, out Version version))
+                {
+                    return version;
+                }
+
+                throw new InvalidOperationException($"Unable to extract version number from '{versionAsString}'");
+            }
+        }
+
+        throw new InvalidOperationException($"No version number in string '{latestReleaseTagName}'");
     }
 
 

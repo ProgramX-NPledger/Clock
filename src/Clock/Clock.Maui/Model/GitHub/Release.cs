@@ -26,6 +26,9 @@ public class Release
     [JsonProperty("node_id")]
     public string NodeId { get; set; }
     
+    [JsonProperty("tag_name")]
+    public string TagName { get; set; }
+    
     [JsonProperty("target_commitish")]
     public string TargetComitish { get; set; }
     
