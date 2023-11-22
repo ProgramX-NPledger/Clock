@@ -1,6 +1,6 @@
 ﻿
 
-namespace Clock.Maui.Services;
+namespace Clock.Maui.Model;
 
 public class AvailableUpdateStatus
 {
@@ -13,7 +13,11 @@ public class AvailableUpdateStatus
     public Exception Exception { get; set; }
 
     public string DownloadUrl { get; set; }
-    
+
+    public Architecture Architecture { get; set; }
+
+    public OperatingSystem OperatingSystem { get; set; }
+
 
     public bool IsUpdateAvailable()
     {

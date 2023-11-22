@@ -1,4 +1,5 @@
 ﻿using Clock.Maui.Data;
+using Clock.Maui.Model;
 using Clock.Maui.Services;
 
 namespace Clock.Maui;
@@ -27,10 +28,11 @@ public partial class App : Application
                 using (GitHubUpdateService gitHubUpdateService = new GitHubUpdateService())
                 {
                     AvailableUpdateStatus latestUpdate = await gitHubUpdateService.GetUpdateStatus(preferPreRelease);
-                    if (latestUpdate.LatestAvailableVersion > latestUpdate.CurrentVersion)
+                    if (latestUpdate.IsUpdateAvailable())
                     {
-            
+                        
                     }
+                    
                     // service should have current version number
                     // and be able to get latest version for configured channel from GitHub
                     
