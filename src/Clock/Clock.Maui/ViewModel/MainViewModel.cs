@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using Clock.Maui.Commands;
 //using Android.Locations;
 using Clock.Maui.Model;
 using Clock.Maui.Services;
@@ -110,7 +111,7 @@ public class MainViewModel : INotifyPropertyChanged
 
 	public ICommand DisplayReportDialogCommand { get; private set; }
 	
-	public ICommand CheckForUpdateCommand { get; private set; }
+	public IAsyncCommand CheckForUpdateCommand { get; private set; }
 
 
 	// MVVM requires a default constructor
@@ -119,7 +120,7 @@ public class MainViewModel : INotifyPropertyChanged
 		StartStopButtonCommand = new Command(() => { StopOrStartMainClock(); });
 		LoadLatestPersistedWorkItemsCommand = new Command(() => { OnRequestLoadLatestPersistedWorkItems(); });
 		DisplayReportDialogCommand = new Command(() => { OnRequestOpenReportDialog(); });
-		CheckForUpdateCommand = new Command(async () => // TODO avoid using async within ctor
+		CheckForUpdateCommand = new AsyncCommand( async () => // TODO avoid using async within ctor https://stackoverflow.com/questions/54232156/how-to-implement-async-comman
 		{
 			bool preferPreRelease = Preferences.Get(GitHubUpdateService.PREFER_PRERELEASE_CONFIG_STRING, false);
 			preferPreRelease = true; // TODO: remove when preferences can be saved
