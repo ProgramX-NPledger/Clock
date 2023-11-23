@@ -24,6 +24,7 @@
             <MenuFlyoutItem Text="Create report ..." Command="{Binding DisplayReportDialogCommand}"></MenuFlyoutItem>
         </MenuBarItem>
         <MenuBarItem Text="Help">
+            <MenuFlyoutItem Text="Check for update" Command="{Binding CheckForUpdateCommand}"></MenuFlyoutItem>
             <MenuFlyoutItem Text="About ..."></MenuFlyoutItem>
         </MenuBarItem>
     </ContentPage.MenuBarItems>

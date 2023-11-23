@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 //using Android.Locations;
 using Clock.Maui.Model;
+using Clock.Maui.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Clock.Maui.ViewModel;
@@ -108,6 +109,8 @@ public class MainViewModel : INotifyPropertyChanged
 	public ICommand LoadLatestPersistedWorkItemsCommand { get; private set; }
 
 	public ICommand DisplayReportDialogCommand { get; private set; }
+	
+	public ICommand CheckForUpdateCommand { get; private set; }
 
 
 	// MVVM requires a default constructor
@@ -116,6 +119,27 @@ public class MainViewModel : INotifyPropertyChanged
 		StartStopButtonCommand = new Command(() => { StopOrStartMainClock(); });
 		LoadLatestPersistedWorkItemsCommand = new Command(() => { OnRequestLoadLatestPersistedWorkItems(); });
 		DisplayReportDialogCommand = new Command(() => { OnRequestOpenReportDialog(); });
+		CheckForUpdateCommand = new Command(async () => // TODO avoid using async within ctor
+		{
+			bool preferPreRelease = Preferences.Get(GitHubUpdateService.PREFER_PRERELEASE_CONFIG_STRING, false);
+			preferPreRelease = true; // TODO: remove when preferences can be saved
+			using (GitHubUpdateService gitHubUpdateService = new GitHubUpdateService())
+			{
+			    AvailableUpdateStatus latestUpdate = await gitHubUpdateService.GetUpdateStatus(preferPreRelease);
+			    if (latestUpdate.IsUpdateAvailable())
+			    {
+			        // pop up confirmation for user
+			        
+			        // if confirm, start download
+			        
+			        // when download complete, prepare for update
+			    }
+			    
+
+			    
+			}
+
+		});
 	}
 
 

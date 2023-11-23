@@ -6,8 +6,10 @@ using System.Net.Http.Headers;
 using System.Reflection;
 using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
+using Clock.Maui.Factories;
 using Clock.Maui.Model;
 using Clock.Maui.Model.GitHub;
+using Microsoft.Maui.Controls.PlatformConfiguration;
 using Newtonsoft.Json;
 using OperatingSystem = Clock.Maui.Model.OperatingSystem;
 
@@ -34,9 +36,7 @@ public class GitHubUpdateService : IDisposable
         AvailableUpdateStatus availableUpdateStatus = new AvailableUpdateStatus()
         {
             CurrentVersion = Assembly.GetExecutingAssembly().GetName().Version,
-            LatestAvailableVersion = Assembly.GetExecutingAssembly().GetName().Version,
             VersionCheckTime = DateTime.Now
-
         };
 
         IEnumerable<Release> releases=null;
@@ -66,30 +66,26 @@ public class GitHubUpdateService : IDisposable
             availableUpdateStatus.CheckSuccessful = false;
             return availableUpdateStatus;
         }
-        releases = releases.Where(q => (q.IsPreRelease && allowPrerelease || !q.IsPreRelease));
         
-        // get latest version
-        if (releases.Any())
+        // convert all releases to our known and parsed structure
+        IEnumerable<AvailableRelease> allAvailableUpdates =
+            releases.Select(AvailableRelease.FromRelease);
+        
+        // limit by prerelease preference
+        IEnumerable<AvailableRelease> afterPreReleasePreference = 
+            allAvailableUpdates.Where(q => (q.IsPreRelease && allowPrerelease || !q.IsPreRelease));
+
+        // limit by architecture/os
+        IEnumerable<AvailableRelease> afterPlatform = GetAvailableUpdateStatusByOperatingSystemAndArchitecture(afterPreReleasePreference);
+        
+        // get the latest
+        if (afterPlatform.Any())
         {
-            Release latestRelease = releases.OrderByDescending(q => q.PublishedAt).FirstOrDefault();
+            AvailableRelease latestAvailableUpdateStatus =
+                afterPlatform.MaxBy(q => q.Version);
+
+            availableUpdateStatus.AvailableRelease = latestAvailableUpdateStatus;
             availableUpdateStatus.CheckSuccessful = true;
-            if (latestRelease == null)
-            {
-                availableUpdateStatus.LatestAvailableVersion = availableUpdateStatus.CurrentVersion;
-                availableUpdateStatus.IsPreRelease = false;
-            }
-            else
-            {
-                PopulateAvailableUpdateStatus(ref availableUpdateStatus,latestRelease.TagName);
-                availableUpdateStatus.IsPreRelease = latestRelease.IsPreRelease;
-                Asset downloadableAsset =
-                    latestRelease.Assets.FirstOrDefault(q => q.ContentType == "application/x-zip-compressed");
-                if (downloadableAsset != null)
-                {
-                    availableUpdateStatus.DownloadUrl = downloadableAsset.BrowserDownloadUrl;
-                }
-                
-            }
         }
         else
         {
@@ -99,63 +95,17 @@ public class GitHubUpdateService : IDisposable
         return availableUpdateStatus;
     }
 
-    private void PopulateAvailableUpdateStatus(ref AvailableUpdateStatus availableUpdateStatus, string latestReleaseTagName)
+    private IEnumerable<AvailableRelease> GetAvailableUpdateStatusByOperatingSystemAndArchitecture(IEnumerable<AvailableRelease> updateStatuses)
     {
-        // version string looks like: 
-        string pattern = @"^v([0-9]\.[0.9]\.[0-9])\-(windows|macos)-(x86|m)-([a-z0-9]+)(\.([0-9]*?))$";
-        RegexOptions options = RegexOptions.Singleline;
-
-        MatchCollection matches = Regex.Matches(latestReleaseTagName, pattern, options);
-        if (matches.Any())
+        if (DeviceInfo.Current.Platform == DevicePlatform.WinUI)
         {
-            Match firstMatch = matches.First();
-            if (firstMatch.Groups.Count >= 4)
-            {
-                Group match2 = firstMatch.Groups[1]; // 	0.0.1
-                Group match3 = firstMatch.Groups[2]; // windows|macos
-                Group match4 = firstMatch.Groups[3]; // x86|m
-                string versionAsString = $"{match2.Value}.0";
-                if (Version.TryParse(versionAsString, out Version version))
-                {
-                    availableUpdateStatus.LatestAvailableVersion = version;
-                    availableUpdateStatus.OperatingSystem = GetOperatingSystemFromString(match3.Value);
-                    availableUpdateStatus.Architecture = GetArchitectureFromString(match4.Value);
-                    return;
-                }
-
-                throw new InvalidOperationException($"Unable to extract version number from '{versionAsString}'");
-            }
+            return updateStatuses.Where(q => q.OperatingSystem == OperatingSystem.Windows);
+        } else if (DeviceInfo.Current.Platform == DevicePlatform.MacCatalyst)
+        {
+            // TODO: return according to architecture
         }
 
-        throw new InvalidOperationException($"No version number in string '{latestReleaseTagName}'");
-    }
-
-    private Architecture GetArchitectureFromString(string s)
-    {
-        if (s == null) throw new ArgumentNullException(nameof(s));
-        switch (s)
-        {
-            case "x86":
-                return Architecture.x86;
-            case "m":
-                return Architecture.M;
-        }
-
-        throw new NotSupportedException($"Unknown Architecture token '{s}'");
-    }
-
-    private OperatingSystem GetOperatingSystemFromString(string s)
-    {
-        if (s == null) throw new ArgumentNullException(nameof(s));
-        switch (s)
-        {
-            case "windows":
-                return OperatingSystem.Windows;
-            case "macos":
-                return OperatingSystem.macOS;
-        }
-
-        throw new NotSupportedException($"Unknown Operating System token '{s}'");
+        throw ExceptionsFactory.CreateDeviceNotSupportedException();
     }
 
 
