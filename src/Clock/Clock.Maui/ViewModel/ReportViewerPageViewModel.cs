@@ -7,7 +7,7 @@ namespace Clock.Maui.ViewModel;
 public class ReportViewerPageViewModel: INotifyPropertyChanged
 {
 	public event PropertyChangedEventHandler PropertyChanged;
-	public event EventHandler<EventArgs> RequestClose;
+	public event EventHandler<System.EventArgs> RequestClose;
 	
 	private string _reportText;
 
@@ -46,6 +46,6 @@ public class ReportViewerPageViewModel: INotifyPropertyChanged
 
 	protected virtual void OnRequestClose()
 	{
-		RequestClose?.Invoke(this, EventArgs.Empty);
+		RequestClose?.Invoke(this, System.EventArgs.Empty);
 	}
 }

@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Windows.Input;
 using Clock.Maui.Utilities;
 
@@ -49,7 +50,7 @@ public class AsyncCommand : IAsyncCommand
 
     public void RaiseCanExecuteChanged()
     {
-        CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+        CanExecuteChanged?.Invoke(this, System.EventArgs.Empty);
     }
 
     #region Explicit implementations

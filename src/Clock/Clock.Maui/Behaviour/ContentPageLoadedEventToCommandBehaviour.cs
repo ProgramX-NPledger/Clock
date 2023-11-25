@@ -22,7 +22,7 @@ public class ContentPageLoadedEventToCommandBehaviour : Behavior<ContentPage>
 		base.OnDetachingFrom(bindable);
 	}
 
-	private void BindableOnLoaded(object sender, EventArgs e)
+	private void BindableOnLoaded(object sender, System.EventArgs e)
 	{
 		MainViewModel viewModel = (MainViewModel)((ContentPage)sender).BindingContext;
 		viewModel.LoadLatestPersistedWorkItemsCommand.Execute(null);

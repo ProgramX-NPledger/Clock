@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Clock.Maui.Commands;
+using Clock.Maui.EventArgs;
 //using Android.Locations;
 using Clock.Maui.Model;
 using Clock.Maui.Services;
@@ -19,13 +20,14 @@ public class MainViewModel : INotifyPropertyChanged
 	private bool _isMainTimerRunning;
 	private ObservableCollection<WorkItemGroupByDate> _workItems;
 
-	public event EventHandler<EventArgs> RequestMainTimerStart;
-	public event EventHandler<EventArgs> RequestMainTimerStop;
-	public event EventHandler<EventArgs> RequestLoadLatestPersistedWorkItems;
+	public event EventHandler<UpdateAvailableEventArgs> UpdateAvailable;
+	public event EventHandler<System.EventArgs> RequestMainTimerStart;
+	public event EventHandler<System.EventArgs> RequestMainTimerStop;
+	public event EventHandler<System.EventArgs> RequestLoadLatestPersistedWorkItems;
 	public event PropertyChangedEventHandler PropertyChanged;
 	public event EventHandler<WorkItemEventArgs> WorkItemAdded;
 
-	public event EventHandler<EventArgs> RequestOpenReportDialog; 
+	public event EventHandler<System.EventArgs> RequestOpenReportDialog; 
 
 	public ObservableCollection<WorkItemGroupByDate> WorkItems
 	{
@@ -129,11 +131,11 @@ public class MainViewModel : INotifyPropertyChanged
 			    AvailableUpdateStatus latestUpdate = await gitHubUpdateService.GetUpdateStatus(preferPreRelease);
 			    if (latestUpdate.IsUpdateAvailable())
 			    {
-			        // pop up confirmation for user
-			        
-			        // if confirm, start download
-			        
-			        // when download complete, prepare for update
+				    // fire an event so the UI thread can pick up the interaction with the user
+				    UpdateAvailable?.Invoke(this,new UpdateAvailableEventArgs()
+				    {
+					    AvailableUpdateStatus = latestUpdate
+				    });
 			    }
 			    
 
@@ -151,19 +153,19 @@ public class MainViewModel : INotifyPropertyChanged
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 	}
 
-	protected virtual void OnRequestMainTimerStart(EventArgs e)
+	protected virtual void OnRequestMainTimerStart(System.EventArgs e)
 	{
 		if (RequestMainTimerStart != null) RequestMainTimerStart(this, e);
 	}
 
-	protected virtual void OnRequestMainTimerStop(EventArgs e)
+	protected virtual void OnRequestMainTimerStop(System.EventArgs e)
 	{
 		if (RequestMainTimerStop != null) RequestMainTimerStop(this, e);
 	}
 
 	protected virtual void OnRequestLoadLatestPersistedWorkItems()
 	{
-		RequestLoadLatestPersistedWorkItems?.Invoke(this, EventArgs.Empty);
+		RequestLoadLatestPersistedWorkItems?.Invoke(this, System.EventArgs.Empty);
 	}
 
 	// protected bool SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
@@ -235,12 +237,12 @@ public class MainViewModel : INotifyPropertyChanged
 
 		MainTimerLastStartedAt = DateTime.Now;
 		IsMainTimerRunning = true;
-		OnRequestMainTimerStart(EventArgs.Empty);
+		OnRequestMainTimerStart(System.EventArgs.Empty);
 	}
 
 	private void StopMainClock()
 	{
-		OnRequestMainTimerStop(EventArgs.Empty);
+		OnRequestMainTimerStop(System.EventArgs.Empty);
 		IsMainTimerRunning = false;
 		MainTimerButtonText = "Start";
 	}
@@ -253,6 +255,6 @@ public class MainViewModel : INotifyPropertyChanged
 
 	protected virtual void OnRequestOpenReportDialog()
 	{
-		RequestOpenReportDialog?.Invoke(this, EventArgs.Empty);
+		RequestOpenReportDialog?.Invoke(this, System.EventArgs.Empty);
 	}
 }

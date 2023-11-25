@@ -16,7 +16,6 @@ public partial class MainPage : ContentPage
     public MainPage()
     {
         InitializeComponent();
-        //BindingContext = new MainViewModel(); // could use this to use a non-default ctor
         
         _mainClock = CreateMainClock();
         MainViewModel viewModel = (MainViewModel)BindingContext;
@@ -36,17 +35,33 @@ public partial class MainPage : ContentPage
         {
             await App.WorkItemRepository.AddCurrentWorkItemToDatabase(e.WorkItem);
         };
-        viewModel.RequestOpenReportDialog+=(s,e) =>
+        viewModel.RequestOpenReportDialog+= (s, e) =>
+        {
+            ReportOptionsPage reportPage = new ReportOptionsPage();
+            Navigation.PushAsync(reportPage); // using Modal removes Back button
+        };
+        viewModel.UpdateAvailable += async (s, e) =>
+        {
+            // pop up confirmation for user
+            string message = $"An upgrade to {e.AvailableUpdateStatus.AvailableRelease.Version} " +
+                             $"(your current version is {e.AvailableUpdateStatus.CurrentVersion}) " +
+                             $"is available.{Environment.NewLine}{Environment.NewLine}" +
+                             $"Do you want to download and prepare the upgrade now?";
+            if (e.AvailableUpdateStatus.AvailableRelease.IsPreRelease)
             {
-                ReportOptionsPage reportPage = new ReportOptionsPage();
-                // Window reportDialogWindow = new Window(reportPage);
-                // Application.Current?.OpenWindow(reportDialogWindow);
-                // reportDialogWindow.Navigation.PushModalAsync(reportPage);
-                Navigation.PushAsync(reportPage); // using Modal removes Back button
-                
+                message +=
+                    $"{Environment.NewLine}{Environment.NewLine}This upgrade is a pre-release upgrade and may not " +
+                    "be stable. This preference can be changed in settings.";
             }
-        ;
-       
+            bool confirmUpgrade = await DisplayAlert("Update available", message, "Upgrade", "No");
+            if (confirmUpgrade)
+            {
+                // prepare the upgrade
+                DisplayAlert("Ok","Prepare for upgrade","Cancel");
+            }
+
+        };
+
     }
 
     private ObservableCollection<WorkItemGroupByDate> GroupByDate(IEnumerable<WorkItem> workItems)

@@ -21,7 +21,7 @@ public class EntryCompletedEventToCommandBehaviour : Behavior<Entry>
 		base.OnDetachingFrom(bindable);
 	}
 
-	private void OnCompleted(object sender, EventArgs e)
+	private void OnCompleted(object sender, System.EventArgs e)
 	{
 		MainViewModel viewModel = (MainViewModel)((Entry)sender).BindingContext;
 		viewModel.StartStopButtonCommand.Execute(null);
