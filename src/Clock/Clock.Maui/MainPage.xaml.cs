@@ -56,10 +56,16 @@ public partial class MainPage : ContentPage
             bool confirmUpgrade = await DisplayAlert("Update available", message, "Upgrade", "No");
             if (confirmUpgrade)
             {
-                // prepare the upgrade
-                DisplayAlert("Ok","Prepare for upgrade","Cancel");
+                ((MainViewModel) BindingContext).StatusText = "Downloading and preparing update ...";
+                using (GitHubUpdateService gitHubUpdateService = new GitHubUpdateService())
+                {
+                    byte[] updateFile=await gitHubUpdateService.DownloadAndPrepareUpdate(e.AvailableUpdateStatus);
+                    ((MainViewModel) BindingContext).StatusText = "Successfully downloaded";
+                    // TODO: we'll temporarily save the file and get the user to update
+                    // https://devblogs.microsoft.com/dotnet/file-and-folder-dialogs-communitytoolkit/
+                }                
             }
-
+            
         };
 
     }

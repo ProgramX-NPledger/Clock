@@ -18,6 +18,7 @@ public class MainViewModel : INotifyPropertyChanged
 	private string _workItemEntry;
 	private string _mainTimerButtonText;
 	private bool _isMainTimerRunning;
+	private string _statusText;
 	private ObservableCollection<WorkItemGroupByDate> _workItems;
 
 	public event EventHandler<UpdateAvailableEventArgs> UpdateAvailable;
@@ -27,8 +28,21 @@ public class MainViewModel : INotifyPropertyChanged
 	public event PropertyChangedEventHandler PropertyChanged;
 	public event EventHandler<WorkItemEventArgs> WorkItemAdded;
 
-	public event EventHandler<System.EventArgs> RequestOpenReportDialog; 
+	public event EventHandler<System.EventArgs> RequestOpenReportDialog;
 
+	public string StatusText
+	{
+		get => _statusText;
+		set
+		{
+			if (_statusText != value)
+			{
+				_statusText = value;
+				OnPropertyChanged();
+			}
+		}
+	}
+	
 	public ObservableCollection<WorkItemGroupByDate> WorkItems
 	{
 		get => _workItems;
@@ -124,6 +138,7 @@ public class MainViewModel : INotifyPropertyChanged
 		DisplayReportDialogCommand = new Command(() => { OnRequestOpenReportDialog(); });
 		CheckForUpdateCommand = new AsyncCommand( async () => // TODO avoid using async within ctor https://stackoverflow.com/questions/54232156/how-to-implement-async-comman
 		{
+			StatusText = "Checking for an update ...";
 			bool preferPreRelease = Preferences.Get(GitHubUpdateService.PREFER_PRERELEASE_CONFIG_STRING, false);
 			preferPreRelease = true; // TODO: remove when preferences can be saved
 			using (GitHubUpdateService gitHubUpdateService = new GitHubUpdateService())
@@ -131,15 +146,17 @@ public class MainViewModel : INotifyPropertyChanged
 			    AvailableUpdateStatus latestUpdate = await gitHubUpdateService.GetUpdateStatus(preferPreRelease);
 			    if (latestUpdate.IsUpdateAvailable())
 			    {
+				    StatusText = $"An update is available";
 				    // fire an event so the UI thread can pick up the interaction with the user
 				    UpdateAvailable?.Invoke(this,new UpdateAvailableEventArgs()
 				    {
 					    AvailableUpdateStatus = latestUpdate
 				    });
 			    }
-			    
-
-			    
+			    else
+			    {
+				    StatusText = $"You are running the latest {(preferPreRelease ? "pre-release " : string.Empty)} version";
+			    }
 			}
 
 		});

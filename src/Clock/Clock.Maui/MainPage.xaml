@@ -29,9 +29,14 @@
         </MenuBarItem>
     </ContentPage.MenuBarItems>
     <ContentView>
-        <VerticalStackLayout>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="50"></RowDefinition>
+            </Grid.RowDefinitions>
             <!-- top pane -->
-            <Grid>
+            <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="100"></ColumnDefinition>
                     <ColumnDefinition Width="*"></ColumnDefinition>
@@ -61,7 +66,7 @@
                         Command="{Binding StartStopButtonCommand}"/>
             </Grid>
             <!-- bottom pane -->
-            <ScrollView>
+            <ScrollView Grid.Row="1">
                <CollectionView
                    ItemsSource="{Binding WorkItems}"
                    ItemsLayout="VerticalGrid,1"
@@ -90,7 +95,10 @@
                </CollectionView>
 
             </ScrollView>
-        </VerticalStackLayout>
+            <HorizontalStackLayout Grid.Row="2" Padding="5">
+                <Label Text="{Binding StatusText}"></Label>
+            </HorizontalStackLayout>
+        </Grid>            
     </ContentView>
 
 </ContentPage>
