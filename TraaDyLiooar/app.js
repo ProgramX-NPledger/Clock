@@ -15,7 +15,7 @@ const {app, BrowserWindow} = require('electron')
 
       mainWindow.loadURL(
         url.format({
-          pathname: path.join(__dirname, `/dist/traa-dy-liooar/browser/index.html`),
+          pathname: path.join(__dirname, `/dist/traa-dy-liooar/index.html`),
           protocol: "file:",
           slashes: true
         })
