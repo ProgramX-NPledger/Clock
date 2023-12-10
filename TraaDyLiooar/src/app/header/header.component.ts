@@ -6,5 +6,19 @@ import { Component } from '@angular/core';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent {
+  model: any={}
+
+  constructor() {
+
+  }
+
+  recordTime() {
+    console.log(this.model);
+  }
 
 }
+
+/*
+https://buddy.works/tutorials/building-a-desktop-app-with-electron-and-angular
+51 in Udemy
+*/

@@ -1,12 +1,24 @@
 <header>
     <div class="px-3 py-2 text-bg-dark border-bottom">
       <div class="container-fluid">
-        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-          <a href="/" class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none">
-           Traa Dy Liooar
-          </a>
-
-          <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
+        <form #mainForm="ngForm" (ngSubmit)="recordTime()">
+            <div class="d-flex flex-wrap justify-content-center justify-content-lg-start">
+                <div class="col">
+                    <!-- timer-->
+                    <input name="timer"
+                    [(ngModel)]="model.timerValue" />
+                </div>
+                <div class="col-8">                    
+                    <input name="task"
+                    [(ngModel)]="model.task" />
+                </div>
+                <div class="col">
+                    <!-- buttons -->
+                    <button type="submit">Record</button>
+                </div>
+    
+            <!-- tabs: Home, Report, Settings -->
+            <!-- <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
             <li>
               <a href="#" class="nav-link text-secondary">
                 <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#home"></use></svg>
@@ -37,9 +49,10 @@
                 Customers
               </a>
             </li>
-          </ul>
-        </div>
-      </div>
+          </ul> -->
+            </div>
+        </form>
+    </div>
     </div>
     <div class="px-3 py-2 border-bottom mb-3">
       <div class="container d-flex flex-wrap justify-content-center">
