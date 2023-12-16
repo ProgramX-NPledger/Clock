@@ -1,0 +1,5 @@
+
+div#clock {  }
+div#clock input { color: red; font-size: 120%; text-align: right; font-family: math; width: 100px;}
+div#task input { font-size: 110%; font-family: sans-serif; width: 100%; }
+div#submit button { }

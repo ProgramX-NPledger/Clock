@@ -3,17 +3,16 @@
       <div class="container-fluid">
         <form #mainForm="ngForm" (ngSubmit)="recordTime()">
             <div class="d-flex flex-wrap justify-content-center justify-content-lg-start">
-                <div class="col">
+                <div class="col" id="clock">
                     <!-- timer-->
                     <input name="timer"
                     [(ngModel)]="model.timerValue" />
-                    {{ timeLeft }}
                 </div>
-                <div class="col-8">                    
+                <div class="col-8" id="task">                    
                     <input name="task"
                     [(ngModel)]="model.task" />
                 </div>
-                <div class="col">
+                <div class="col" id="submit">
                     <!-- buttons -->
                     <button type="submit">Record</button>
                 </div>

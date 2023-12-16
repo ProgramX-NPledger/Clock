@@ -36,12 +36,7 @@ export class HeaderComponent implements OnInit {
   
   startTimer() {
     this.interval = setInterval(() => {
-      if(this.timeLeft > 0) {
-        this.timeLeft--;
         this.model.timerValue++;
-      } else {
-        this.timeLeft = 10;
-      }
     },1000)
   }
 
