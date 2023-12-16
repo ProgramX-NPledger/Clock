@@ -5,8 +5,9 @@
             <div class="d-flex flex-wrap justify-content-center justify-content-lg-start">
                 <div class="col" id="clock">
                     <!-- timer-->
-                    <input name="timer"
-                    [(ngModel)]="model.timerValue" />
+                    {{ model.timerValue | secondsToDateTime | date:'HH:mm:ss' }}
+                    <!-- <input name="timer"
+                    [(ngModel)]="model.timerValue | secondsToDateTime | date:'HH:mm:ss'" /> -->
                 </div>
                 <div class="col-8" id="task">                    
                     <input name="task"
