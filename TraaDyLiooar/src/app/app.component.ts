@@ -7,4 +7,9 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'TraaDyLiooar';
+
+  submitWorkItem(event: any) {
+    console.log('From child');
+    console.log(event);
+  }
 }

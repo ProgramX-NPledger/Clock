@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { timer } from 'rxjs';
+import { RepositoryService } from '../_services/repository.service';
 
 @Component({
   selector: 'app-header',
@@ -7,6 +8,8 @@ import { timer } from 'rxjs';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
+  @Output() submitWorkItem = new EventEmitter();
+
   model: any={
     timerValue: 0
   };
@@ -14,7 +17,7 @@ export class HeaderComponent implements OnInit {
   interval : any;
   subscribeTimer: any;
 
-  constructor() {
+  constructor(public repositoryService : RepositoryService) {
 
   }
 
@@ -22,6 +25,7 @@ export class HeaderComponent implements OnInit {
     this.startTimer();
 
   }
+
 
   
   // https://stackoverflow.com/questions/50455347/how-to-do-a-timer-in-angular-5
@@ -42,6 +46,7 @@ export class HeaderComponent implements OnInit {
   }
 
   recordTime() {
+    this.submitWorkItem.emit(this.model);
     console.log(this.model);
   }
 
