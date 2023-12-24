@@ -13,7 +13,9 @@
   </div>
 
   <ul *ngFor="let workItem of workItems">
-    <li>{{workItem.title}}</li>
+    <li>
+      {{workItem.startedTimeStamp}}<br />
+      <strong>{{workItem.title}}</strong></li>
   </ul>
   
   

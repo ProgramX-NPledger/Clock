@@ -33,8 +33,14 @@ export class RepositoryService {
     const workItemsJson = localStorage.getItem(this.WORK_ITEMS_LOCAL_STORAGE_KEY);
     if (workItemsJson) {
       const workItems = JSON.parse(workItemsJson);
-      // sort?
-      return workItems;
+      // sort the work items descending
+      const sortedWorkItems:WorkItem[] = workItems.sort((p1:WorkItem,p2:WorkItem)=>{
+        const t1 = new Date(p1.startedTimeStamp).getTime();
+        const t2 = new Date(p2.startedTimeStamp).getTime();        
+        const sorted = t1 <= t2 ? 1 : -1;
+        return sorted;
+      })
+      return sortedWorkItems;
     }
     return [];
   }
