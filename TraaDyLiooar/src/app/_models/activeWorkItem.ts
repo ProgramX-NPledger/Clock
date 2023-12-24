@@ -3,7 +3,7 @@
 */
 
 export interface ActiveWorkItem {
-    started: any;
-    timerValue: number;    
+    startedTimeStamp: Date; 
+    timerValueSeconds: number;    
     title: string|null;
 }

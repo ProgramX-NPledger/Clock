@@ -3,7 +3,7 @@
 */
 
 export interface WorkItem {
-    started: any;
-    ended: any|null;
+    startedTimeStamp: Date; 
+    ended: any|null; 
     title: string|null;   
 }

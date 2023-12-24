@@ -13,8 +13,8 @@ export class HeaderComponent implements OnInit {
   @Output() submitWorkItem = new EventEmitter();
 
   model: ActiveWorkItem={
-    started: 0,
-    timerValue:0,
+    startedTimeStamp: new Date(),
+    timerValueSeconds:0,
     title: null
   };
   timeLeft: number = 10;
@@ -45,21 +45,21 @@ export class HeaderComponent implements OnInit {
   
   startTimer() {
     this.interval = setInterval(() => {
-        this.model.timerValue++;
+        this.model.timerValueSeconds++;
     },1000)
   }
 
   recordTime() {
     const workItem = <WorkItem>({
-      ended: this.model.timerValue,
-      started: this.model.started,
+      ended: this.model.timerValueSeconds,
+      startedTimeStamp: this.model.startedTimeStamp,
       title: this.model.title
     });
   
     this.submitWorkItem.emit(this.model);
     // reset the clock
-    this.model.started=this.model.timerValue;
-    this.model.timerValue = 0;
+    this.model.startedTimeStamp=new Date(); // this.model.timerValueSeconds;
+    this.model.timerValueSeconds = 0;
     this.model.title='';
 
     console.log(this.model);
