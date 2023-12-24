@@ -1,6 +1,8 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { timer } from 'rxjs';
 import { RepositoryService } from '../_services/repository.service';
+import { WorkItem } from '../_models/workItem';
+import { ActiveWorkItem } from '../_models/activeWorkItem';
 
 @Component({
   selector: 'app-header',
@@ -10,8 +12,10 @@ import { RepositoryService } from '../_services/repository.service';
 export class HeaderComponent implements OnInit {
   @Output() submitWorkItem = new EventEmitter();
 
-  model: any={
-    timerValue: 0
+  model: ActiveWorkItem={
+    started: 0,
+    timerValue:0,
+    title: null
   };
   timeLeft: number = 10;
   interval : any;
@@ -46,7 +50,18 @@ export class HeaderComponent implements OnInit {
   }
 
   recordTime() {
+    const workItem = <WorkItem>({
+      ended: this.model.timerValue,
+      started: this.model.started,
+      title: this.model.title
+    });
+  
     this.submitWorkItem.emit(this.model);
+    // reset the clock
+    this.model.started=this.model.timerValue;
+    this.model.timerValue = 0;
+    this.model.title='';
+
     console.log(this.model);
   }
 
