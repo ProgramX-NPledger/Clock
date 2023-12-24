@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { WorkItem } from '../_models/workItem';
 
 @Component({
   selector: 'app-work-items-list',
@@ -6,5 +7,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./work-items-list.component.css']
 })
 export class WorkItemsListComponent {
+  @Input() workItems: WorkItem[] = [];
 
 }
