@@ -18,5 +18,13 @@ export class AppComponent {
     // received from the recordTime method in the header component
     // submits a work item model for storage
     this.repositoryService.addWorkItem(event);
+    // load and refresh work items
+    this.loadAndRefreshWorkItems(); 
+  }
+
+  loadAndRefreshWorkItems() {
+    const workItems = this.repositoryService.getWorkItems();
+    // work items need to be passed to the work Items child for display
+    
   }
 }
