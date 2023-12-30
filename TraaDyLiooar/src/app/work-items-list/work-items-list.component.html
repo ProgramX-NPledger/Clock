@@ -11,11 +11,9 @@
       </div>
     </div>
   </div>
-
-  <ul *ngFor="let workItem of workItems">
-    <li>
-      {{workItem.startedTimeStamp}}<br />
-      <strong>{{workItem.title}}</strong></li>
-  </ul>
   
-  
+  <accordion>
+    <accordion-group *ngFor="let workItemsByDay of getWorkItemsByDay()" [heading]="workItemsByDay.friendlyDate">
+      <p>etc.</p>
+    </accordion-group>
+  </accordion>

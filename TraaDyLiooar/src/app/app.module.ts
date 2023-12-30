@@ -8,6 +8,7 @@ import { HeaderComponent } from './header/header.component';
 import { FormsModule } from '@angular/forms';
 import { SecondsToDateTimePipe } from './seconds-to-date-time.pipe';
 import { WorkItemsListComponent } from './work-items-list/work-items-list.component';
+import { AccordionModule } from 'ngx-bootstrap/accordion';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { WorkItemsListComponent } from './work-items-list/work-items-list.compon
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    FormsModule
+    FormsModule,
+    AccordionModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]
