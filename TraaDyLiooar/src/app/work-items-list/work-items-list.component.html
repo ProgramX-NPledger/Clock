@@ -12,8 +12,19 @@
     </div>
   </div>
   
-  <accordion>
+  <ul>
+    <li *ngFor="let workItemsByDay of getWorkItemsByDay()">
+      {{ workItemsByDay.friendlyDate }}
+      <ul>
+        <li *ngFor="let workItem of workItemsByDay.workItems">
+          {{ workItem.title}}
+        </li>
+      </ul> 
+    </li>
+  </ul>
+
+  <!-- <accordion>
     <accordion-group *ngFor="let workItemsByDay of getWorkItemsByDay()" [heading]="workItemsByDay.friendlyDate">
       <p>etc.</p>
     </accordion-group>
-  </accordion>
+  </accordion> -->
